@@ -5,19 +5,13 @@
 
 namespace memorydb {
 
-template<typename T, T::* field>
-class MemberReference : Reference
+template<Item::* from_reference, Item::* to_reference_addresses>
+class MemberReference : public Reference
 {
 public:
-	int id() const { return id_; }
-	const std::slist<Reference*>* refs() const { return &refs_; }
-	void save();
+	int host() const;
 	
 private:
-	bool changed_;
-	int id_;
-	std::slist<Reference*> refs_;
-	static Tracker* tracker_;
 };
 
 }

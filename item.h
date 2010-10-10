@@ -1,7 +1,6 @@
 #ifndef MEMORYDB_ITEM_H_
 #define MEMORYDB_ITEM_H_
 
-#include <ext/slist>
 #include "reference.h"
 
 namespace memorydb {
@@ -16,7 +15,6 @@ public:
 private:
 	bool changed_;
 	int id_;
-	std::slist<Reference*> refs_;
 	static Tracker* tracker_;
 };
 
