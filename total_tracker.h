@@ -1,5 +1,5 @@
-#ifndef MEMORYDB_TRACKER_H_
-#define MEMORYDB_TRACKER_H_
+#ifndef MEMORYDB_TOTAL_TRACKER_H_
+#define MEMORYDB_TOTAL_TRACKER_H_
 
 #include "reference.h"
 #include "item.h"
@@ -7,8 +7,7 @@
 
 namespace memorydb {
 
-template<typename T>
-class Tracker
+class TotalTracker
 {
 public:
 	Item<T>* get(int id);
@@ -21,11 +20,9 @@ private:
 	Item<T>* load(int id);
 	void unload(int id);
 	void unload(Item<T>* item);
-	void save(int id);
-	void save(Item<T>* item);
 };
 
 }
 
 
-#endif // MEMORYDB_TRACKER_H_
+#endif // MEMORYDB_TOTAL_TRACKER_H_

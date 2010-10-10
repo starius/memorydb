@@ -12,6 +12,7 @@ class Item
 public:
 	int id() const { return id_; }
 	const std::slist<Reference<T>*>* refs() const { return &refs_; }
+	void save();
 	
 private:
 	bool changed_;
