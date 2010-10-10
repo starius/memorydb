@@ -9,7 +9,7 @@ template<typename T>
 class Reference
 {
 public:
-	int id() { return id_; }
+	int id() const { return id_; }
 	//~ T* operator ->() { return get(); }
 	T* get();
 	void set(T*);

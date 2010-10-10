@@ -9,6 +9,8 @@ namespace memorydb {
 template<typename T>
 class Item
 {
+	int id() const { return id_; }
+	const slist<Reference*>* refs() const { return &refs_; }
 private:
 	int id_;
 	slist<Reference*> refs_;
