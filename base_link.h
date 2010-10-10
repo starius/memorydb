@@ -10,9 +10,16 @@ class BaseLink
 {
 public:
 	REFERENSED* get();
-	void set(REFERENSED* item);
+	bool set(REFERENSED* item);
+	bool unload_recur();
+	bool delete_recur();
+	bool is_set() const { return ref_ == NULL; }
+	bool is_loaded() const { return !(ref_ & 1); }
 private:
 	REFERENSED* ref_;
+	bool unload(REFERENSED* item, int id);
+	bool delete(REFERENSED* item);
+	bool load();
 };
 
 }
