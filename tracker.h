@@ -7,23 +7,24 @@
 
 namespace memorydb {
 
-template<typename T>
 class Tracker
 {
 public:
-	Item<T>* get(int id);
+	Item* get(int id);
 	
 private:
-	std::map<id, Item<T>*> loaded_;
+	std::map<id, Item*> loaded_;
 	int occupied_; // total space in bytes
-	std::slist<Item<T>*> changed_;
+	std::slist<Item*> changed_;
 	
-	Item<T>* load(int id);
+	Item* load(int id);
 	void unload(int id);
-	void unload(Item<T>* item);
+	void unload(Item* item);
 	void save(int id);
-	void save(Item<T>* item);
+	void save(Item* item);
 };
+
+static Tracker tracker;
 
 }
 

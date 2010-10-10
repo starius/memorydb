@@ -5,18 +5,18 @@
 
 namespace memorydb {
 
-template<typename T>
+
 class Reference
 {
 public:
 	int id() const { return id_; }
-	//~ Item<T>* operator ->() { return get(); }
-	Item<T>* get();
-	void set(Item<T>* item);
+	//~ Item* operator ->() { return get(); }
+	Item* get();
+	void set(Item* item);
 	void set(int id);
 	
 private:
-	Item<T>* item_;
+	Item* item_;
 	int id_;
 };
 
