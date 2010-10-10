@@ -10,12 +10,13 @@ class Reference
 {
 public:
 	int id() const { return id_; }
-	//~ T* operator ->() { return get(); }
-	T* get();
-	void set(T*);
+	//~ Item<T>* operator ->() { return get(); }
+	Item<T>* get();
+	void set(Item<T>* item);
 	void set(int id);
+	
 private:
-	T* item_;
+	Item<T>* item_;
 	int id_;
 };
 

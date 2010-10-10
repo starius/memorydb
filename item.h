@@ -6,14 +6,17 @@
 
 namespace memorydb {
 
-template<typename T>
+template<typename T> // T is Item's descendant
 class Item
 {
+public:
 	int id() const { return id_; }
-	const slist<Reference*>* refs() const { return &refs_; }
+	const std::slist<Reference<T>*>* refs() const { return &refs_; }
+	
 private:
+	bool changed_;
 	int id_;
-	slist<Reference*> refs_;
+	std::slist<Reference<T>*> refs_;
 };
 
 }
