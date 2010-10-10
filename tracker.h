@@ -10,6 +10,7 @@ namespace memorydb {
 class Tracker
 {
 public:
+	Tracker(char* db_name);
 	Item* get(int id);
 	
 private:
