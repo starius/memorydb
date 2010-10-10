@@ -12,7 +12,11 @@ class Model;
 
 class AbstractReference
 {
+	virtual void foo() = 0;
 };
+
+
+
 
 
 
@@ -36,6 +40,8 @@ public:
 	//~ Model<T>* host() { return (T*)((char*)this - offsetof(T, r)); }
 	Model<T>* host() { return (T*)((char*)this - offset); }
 	
+	void foo() {}
+
 private:
 	static int offset;
 };
