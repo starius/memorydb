@@ -1,12 +1,12 @@
-#ifndef MEMORYDB_ITEM_H_
-#define MEMORYDB_ITEM_H_
+#ifndef MEMORYDB_MEMBER_REFERENCE_H_
+#define MEMORYDB_MEMBER_REFERENCE_H_
 
-#include <ext/slist>
 #include "reference.h"
 
 namespace memorydb {
 
-class Item
+template<typename T, T::* field>
+class MemberReference : Reference
 {
 public:
 	int id() const { return id_; }
@@ -23,4 +23,6 @@ private:
 }
 
 
-#endif // MEMORYDB_ITEM_H_
+#endif // MEMORYDB_MEMBER_REFERENCE_H_
+
+
