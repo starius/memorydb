@@ -17,6 +17,7 @@ public:
 	
 private:
 	Item* item_;
+	static Tracker* tracker_;
 };
 
 }

@@ -25,7 +25,6 @@ private:
 	void save(Item* item);
 };
 
-static Tracker tracker;
 
 }
 
