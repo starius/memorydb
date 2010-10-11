@@ -65,6 +65,10 @@ int User::i = 100;
 
 int main()
 {
+	int r = 34;
+	double d;
+	d = double(r);
+	r = int(d);
 	
 	User user;
 	assert(user.r.host() == &user);
