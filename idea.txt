@@ -40,14 +40,13 @@ BaseLinkSet<bool ordered=false, bool multi=false, typename Container=vector>
 	ordered -- хранит порядок, в котором элементы добавлялись
 	multi -- позволяет хранить ссылку на один и тот же элемент несколько раз
 		в этом случае может ссылаться только на BaseLinkSet
-Link<typename LINK_FROM, typename LINK_TO>, LINK_FROM и LINK_TO -- BaseLink или BaseLinkSet
-	содержит LINK_FROM
-	умеет получать указатели на LINK_TO, на который(ые) ссылается
 Inner<FROM, from_field>
 	объект, который умеет восстанавливать внешний по отношению к нему объект
 Reference<typename FROM, from_field, typename TO, to_field, typename LINK_FROM, typename LINK_TO>
-	наследуется от Link<LINK_FROM, LINK_TO> и от Inner<FROM, from_field>
-	возвращает указатели на Reference<TO, to_field, FROM, from_field, LINK_TO, LINK_FROM>
+	LINK_FROM и LINK_TO -- BaseLink или BaseLinkSet
+	наследуется от LINK_FROM и от Inner<FROM, from_field>
+	* умеет получать указатели на LINK_TO, на который(ые) ссылается
+	* возвращает указатели на Reference<TO, to_field, FROM, from_field, LINK_TO, LINK_FROM>
 Relation<typename FROM, from_field, typename TO, to_field, typename LINK_FROM, typename LINK_TO>
 	наследуется от Reference
 	служит для хранения отношений между объектами
@@ -84,8 +83,16 @@ typedef Reference<FROM, from_field, TO, to_field, BaseLinkSet, BaseLink>
 typedef Reference<FROM, from_field, TO, to_field, BaseLinkSet, BaseLinkSet> 
 	M2M<FROM, from_field, TO, to_field>
 
+Методы BaseLinkSet:
+	bool search(BaseLink) -- проверяет вхождение
 
-Методы BaseLink и BaseLinkSet
+Методы BaseLink:
+	BaseLink можно сравнивать с другим BaseLink с помощью ==
+
+Методы Inner:
+	host() -- возвращает указатель на объект, содержащий этот Inner
+
+Методы BaseLink и BaseLinkSet (указатели везде тут BaseLink или BaseLinkSet) 
 	unload_simple(указатель, ID) -- исправиль указанный указатель внутри себя на соответствующий ID
 	load_simple(указатель, ID) -- обратное к unload_simple
 	delete_simple(указатель или ID):
@@ -96,33 +103,26 @@ typedef Reference<FROM, from_field, TO, to_field, BaseLinkSet, BaseLinkSet>
 			в случае multi=true, удаляется одна связь, а не все
 	set_simple(указатель или ID) -- для BaseLink устанавливает его смотрящим на это
 		для BaseLinkSet, добавляет элемент к списку
-		у BaseLink в случае, если до этого был установлен, сначала делает delete
 
-Методы Link:
-	unload(ID) -- вызвать unload_simple() у (всех членов) себя 
-		и у соответствующих членов по другую сторону связи(связей)
-	delete() -- вызвать delete_simple() у (всех членов) себя 
-		и delete_simple(указатель или ID) у соответствующих членов по другую сторону связи(связей)
-	delete(указатель или ID) -- вызвать delete_simple(указатель или ID) у себя 
-		и у соответствующих членов по другую сторону связи(связей)
-	set(указатель или ID) -- вызвать set_simple(указатель или ID)
-		и set_simple(this) у соответствующих членов по другую сторону связи(связей)
-	load(указатель, ID) -- вызывает load_simple(указатель, ID) у себя 
-		и load_simple(this, ID) у соответствующих членов по другую сторону связи(связей)
+Методы Reference: (тут указатели на объекты модели, на которую ссылаются)
+	эти методы работают не только с своим объектом, но и 
+	с принимающей ссылкой того, на который ссылаются
+		unload() -- превращает все указатели в ID
+		delete() -- обнуляет все ID/указатели или удаляет их в случае BaseLinkSet
+		delete(указатель или ID) -- исключает из себя этот элемент (для BaseLinkSet)
+		set(указатель или ID) -- налаживает связь с этим элементом
+			если LINK_TO=BaseLink, то сначала вызывает у Reference этого элемента delete (если был установлен)
+		load() -- загружает объект(ы), на которые ссылается, устанавливает указатели
+		load(ID) -- (для BaseLinkSet) загружает объект с таким ID
 
-Методы BaseLinkSet:
-	bool search(BaseLink) -- проверяет вхождение
-
-Методы BaseLink:
-	BaseLink можно сравнивать с другим BaseLink с помощью ==
-
-Методы Inner:
-	host() -- возвращает указатель на объект, содержащий этот Inner
 
 Методы Reference:
 	Reference<LINK_FROM=BaseLink> с одинаковым TO можно сравнивать с помощью ==
 		сдвиг при этом вычисляется внутри, если они в состоянии указателей
-	у Reference<LINK_FROM=BaseLink> можно узнать ID (на который она ссылается)
+	Объявление функций в Reference:
+		у Reference<LINK_FROM=BaseLink> можно узнать ID, на который она ссылается
+		у Reference можно узнать ID её объекта
+		ID у ExternalPointer равен 0 (и его никто не должен спрашивать)
 	Reference<LINK_FROM=BaseLinkSet> можно итерировать, 
 		элементы представляются как указатели на Reference<LINK_FROM=BaseLink>
 
