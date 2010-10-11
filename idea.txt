@@ -61,11 +61,12 @@ Relation<typename FROM, from_field, typename TO, to_field, typename LINK_FROM, t
 размер всех ссылок (Reference) для случая BaseLink равен размеру указателя
 для ExternalPointer возможно копирование, сопровождаемое созданием новых связей
 копировать Reference или InnerLinkSet нельзя
-деструктор Relation вызывает unload_recur
-деструктор ExternalPointer вызывает delete_recur
-деструктор InnerLinkSet вызывает unload_recur
+деструктор Relation вызывает unload
+деструктор ExternalPointer вызывает delete
+деструктор InnerLinkSet вызывает unload
 для Relation и ExternalPointer определено
 	->, возвращающее объект модели
+	
 
 typedef Reference<FROM, from_field, TO, to_field, BaseLink, BaseLink> 
 	O2O<FROM, from_field, TO, to_field>;
@@ -78,9 +79,9 @@ typedef Reference<FROM, from_field, TO, to_field, BaseLinkSet, BaseLinkSet>
 
 
 Методы BaseLink и BaseLinkSet
-	unload(указатель, ID) -- исправиль указанный указатель внутри себя на соответствующий ID
-	load(указатель, ID) -- обратное к unload
-	delete(указатель или ID):
+	unload_simple(указатель, ID) -- исправиль указанный указатель внутри себя на соответствующий ID
+	load_simple(указатель, ID) -- обратное к unload_simple
+	delete_simple(указатель или ID):
 		BaseLink: установить соотв. указатель или ID на NULL
 		BaseLinkSet: удалить соотв. указатель или ID на NULL из себя
 			если ordered=false и Container!=list, последний элемент становится на место удаленного
@@ -88,20 +89,20 @@ typedef Reference<FROM, from_field, TO, to_field, BaseLinkSet, BaseLinkSet>
 			в случае multi=true, удаляется одна связь, а не все
 	set(указатель или ID) -- для BaseLink устанавливает его смотрящим на это
 		для BaseLinkSet, добавляет элемент к списку
-		у BaseLink в случае, если до этого был установлен, сначала делает delete_recur
+		у BaseLink в случае, если до этого был установлен, сначала делает delete
 
 
 Методы Link:
-	unload_recur() -- вызвать unload() у (всех членов) себя 
+	unload() -- вызвать unload_simple() у (всех членов) себя 
 		и у соответствующих членов по другую сторону связи(связей)
-	delete_recur() -- вызвать delete() у (всех членов) себя 
+	delete() -- вызвать delete_simple() у (всех членов) себя 
 		и у соответствующих членов по другую сторону связи(связей)
-	delete_recur(указатель или ID) -- вызвать delete(указатель или ID) у себя 
+	delete(указатель или ID) -- вызвать delete_simple(указатель или ID) у себя 
 		и у соответствующих членов по другую сторону связи(связей)
-	set_recur(указатель или ID) -- вызвать set(указатель или ID) у (всех членов) себя 
-		и set(this) у соответствующих членов по другую сторону связи(связей)
-	load_recur(указатель, ID) -- вызывает load(указатель, ID) у себя 
-		и load_recur(this, ID) у соответствующих членов по другую сторону связи(связей)
+	set(указатель или ID) -- вызвать set_simple(указатель или ID) у (всех членов) себя 
+		и set_simple(this) у соответствующих членов по другую сторону связи(связей)
+	load(указатель, ID) -- вызывает load_simple(указатель, ID) у себя 
+		и load_simple(this, ID) у соответствующих членов по другую сторону связи(связей)
 
 
 Методы Inner:
