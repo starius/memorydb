@@ -6,6 +6,7 @@
 #include <cstddef>
 #include <cassert>
 #include <iostream>
+#include <vector>
 
 template<typename T>
 class Model;
@@ -73,6 +74,13 @@ int f(int* a)
 	return 2;
 }
 
+class Df
+{
+	std::vector<int> a;
+	std::vector<int> b;
+	//~ std::vector<int> c;
+};
+
 int main()
 {
 	int r = 34;
@@ -84,6 +92,15 @@ int main()
 	
 	assert(f(r) == 1);
 	assert(f(pr) == 2);
+	
+	for (int i=0; i<9999999; i++)
+	{
+		new Df;
+	}
+	
+	char w;
+	std::cin >> w;
+	
 	
 	//~ User user;
 	//~ assert(user.r.host() == &user);

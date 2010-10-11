@@ -37,30 +37,35 @@ ID и указатель могут храниться вместе: испол�
 BaseLink -- указатель на что угодно
 BaseLinkSet<bool ordered=false, bool multi=false, typename Container=vector>
 	содержит Container из BaseLink.
-	ordered -- хранит порядок, в котором хранятся элементы
+	ordered -- хранит порядок, в котором элементы добавлялись
 	multi -- позволяет хранить ссылку на один и тот же элемент несколько раз
-		в этом случае может ссылаться только BaseLinkSet
+		в этом случае может ссылаться только на BaseLinkSet
 Link<typename LINK_FROM, typename LINK_TO>, LINK_FROM и LINK_TO -- BaseLink или BaseLinkSet
 	хранит в себе LINK_FROM
 	умеет получать указатели на LINK_TO, на который(ые) ссылается
 Inner<FROM, from_field>
 	объект, который умеет восстанавливать внешний по отношению к нему объект
-InnerReference<typename FROM, from_field, typename LINK_FROM, typename LINK_TO>
-	наследуется от Link<LINK_FROM, LINK_TO> и от Inner<FROM, from_field>
-ExternalReference<typename TO, to_field, typename LINK_FROM, typename LINK_TO>
-	наследуется от Link<LINK_FROM, LINK_TO>
+InnerLinkSet<typename FROM>
+	наследуется от Link<BaseLinkSet, BaseLink> и от Inner<FROM, -1>
+	возвращает указатели на ExternalPointer<FROM>
+	входит в все модели и служит для хранения указателей на этот объект на время сессии
+ExternalPointer<typename TO>
+	наследуется от Link<BaseLinkSet, BaseLink>
 	служит для ссылания на объекты из не объектов
-	умеет получать  указатели на 
-	InnerReference<TO, to_field, typename LINK_TO, typename LINK_FROM>
-	реализует получение объекта, на который ссылаются (типа TO)
-Reference<typename FROM, from_field, typename TO, to_field, typename LINK_FROM, typename LINK_TO>
-	наследуется от InnerReference<FROM, from_field, LINK_FROM, LINK_TO>
-	и от ExternalReference<TO, to_field, LINK_TO, LINK_FROM>
+	умеет получать указатели на InnerLinkSet<TO>
+Relation<typename FROM, from_field, typename TO, to_field, typename LINK_FROM, typename LINK_TO>
+	наследуется от Link<LINK_FROM, LINK_TO> и от Inner<FROM, from_field>
+	возвращает указатели на Reference<TO, to_field, FROM, from_field, LINK_TO, LINK_FROM>
 	служит для хранения отношений между объектами
 
 размер всех ссылок (Reference) для случая BaseLink равен размеру указателя
-для ExternalReference возможно копирование, сопровождаемое созданием новых связей
-деструктор ExternalReference удаляет 
+для ExternalPointer возможно копирование, сопровождаемое созданием новых связей
+копировать Reference или InnerLinkSet нельзя
+деструктор Relation вызывает unload_recur
+деструктор ExternalPointer вызывает delete_recur
+деструктор InnerLinkSet вызывает unload_recur
+для Relation и ExternalPointer определено
+	->, возвращающее объект модели
 
 typedef Reference<FROM, from_field, TO, to_field, BaseLink, BaseLink> 
 	O2O<FROM, from_field, TO, to_field>;
