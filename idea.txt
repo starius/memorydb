@@ -42,8 +42,9 @@ BaseLinkSet<bool ordered=false, bool multi=false, typename Container=vector>
 		в этом случае может ссылаться только BaseLinkSet
 Link<typename LINK_FROM, typename LINK_TO>, LINK_FROM и LINK_TO -- BaseLink или BaseLinkSet
 	хранит в себе LINK_FROM
-Inner<FROM, from_field> -- объект, который умеет восстанавливать внешний по 
-	отношению к нему объект
+	умеет получать указатели на LINK_TO, на который(ые) ссылается
+Inner<FROM, from_field>
+	объект, который умеет восстанавливать внешний по отношению к нему объект
 InnerReference<typename FROM, from_field, typename LINK_FROM, typename LINK_TO>
 	наследуется от Link<LINK_FROM, LINK_TO> и от Inner<FROM, from_field>
 ExternalReference<typename TO, to_field, typename LINK_FROM, typename LINK_TO>
