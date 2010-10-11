@@ -63,6 +63,16 @@ template<typename T> int Reference<T>::offset = offsetof(User, q);
 
 int User::i = 100;
 
+
+int f(int a)
+{
+	return 1;
+}
+int f(int* a)
+{
+	return 2;
+}
+
 int main()
 {
 	int r = 34;
@@ -70,8 +80,13 @@ int main()
 	d = double(r);
 	r = int(d);
 	
-	User user;
-	assert(user.r.host() == &user);
+	int* pr = &r;
+	
+	assert(f(r) == 1);
+	assert(f(pr) == 2);
+	
+	//~ User user;
+	//~ assert(user.r.host() == &user);
 	
 	//~ DBGPRINTF("qwe%s", "123");
 	
