@@ -52,15 +52,15 @@ private:
 class User : public Model<User>
 {
 public:
+	Reference<User> r;
 	int q;
 	int a;
 	//~ Reference<User, offsetof(User, q)> r;
-	Reference<User> r;
 	
 	static int i;
 };
 
-template<typename T> int Reference<T>::offset = offsetof(User, q);
+template<typename T> int Reference<T>::offset = offsetof(T, r);
 
 int User::i = 100;
 
@@ -93,21 +93,22 @@ int main()
 	assert(f(r) == 1);
 	assert(f(pr) == 2);
 	
-	for (int i=0; i<9999999; i++)
-	{
-		new Df;
-	}
+	//~ for (int i=0; i<9999999; i++)
+	//~ {
+		//~ new Df;
+	//~ }
+	//~ 
+	//~ char w;
+	//~ std::cin >> w;
 	
-	char w;
-	std::cin >> w;
+	
+	User user;
+	assert(user.r.host() == &user);
 	
 	
-	//~ User user;
-	//~ assert(user.r.host() == &user);
+	std::cout << ((int)(user.r.host())) %32 << std::endl;
+	std::cout << (int)(&user) << std::endl;
 	
 	//~ DBGPRINTF("qwe%s", "123");
-	
-	//~ std::cout << (int)(user.r.host()) << std::endl;
-	//~ std::cout << (int)(&user) << std::endl;
 }
 
