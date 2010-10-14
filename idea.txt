@@ -12,13 +12,15 @@
       измененные объекты пишутся в фоне в БД
   * хранящий соответствие ID уже загруженным указателям
       соответствие ID хранит в виде vector или map, 
-      в последнем случае хранит только загруженные элементы (оптимизация)
+      (в последнем случае хранит только загруженные элементы (оптимизация))
   * руководит выгрузкой (то есть удалением из памяти)
 7. ID новому объекту присваивается в ленивой манере 
    (то есть когда этот ID нужен, в частности, когда выгружется)
-   
+8. Выгрузка объектов: выкидываем все объекты, не использовавшиеся с последнего обхода.
+   следующий обход делать, когда из оставшихся объектов неиспользованными 
+   (с момента последнего обхода) останется столько, сколько мы хотели выкинуть
+
 TODO: 
-механизм выгрузки объектов при нехватке памяти (алгоритм выбора: кого выгрузить)
 создание индексированных полей (решает проблему поиска и сортировки)
 
 
@@ -89,6 +91,10 @@ ExternalPointer<typename TO>
 	вложенность нужна для использования Reference
 	служит для ссылания на объекты из не объектов
 	умеет получать указатели на InnerLinkSet<TO>
+ExternalCollection<typename TO>
+	содержит интерфейс к vector из ExternalPointer
+	если объект, содержащийся в коллекции, был удален, его ExternalPointer = 0
+	ExternalCollection отслеживает такие ситуации и "перескакивает" через такие ситуации.
 BaseModel<T>
 	базовый тип для всех моделей
 	тип T наследуется от BaseModel<T>
@@ -174,3 +180,39 @@ typedef Reference<FROM, from_field, TO, to_field, BaseLinkSet, BaseLinkSet>
 		элементы представляются как указатели на Reference<LINK_FROM=BaseLink>
 
 
+
+
+пользовательский код:
+
+	class User : public BaseModel<User>
+	{
+	public:
+		enum Relations
+		{
+			r_referal,
+			r_invited
+		};
+		int age;
+		std::string name;
+		M2O<User, r_referal, User, r_invited> referal;
+		O2M<User, r_invited, User, r_referal> invited;
+		
+		template<class Action>
+		void persist(Action& a)
+		{
+			dbo::field(a, age, "age");
+			dbo::field(a, name, "name");
+			dbo::field(a, referal, "referal");
+			dbo::field(a, invited, "invited");
+		}
+	}
+	
+	ExternalPointer<User> user = new User();
+	user->age = 99;
+	user->name = "foo";
+	
+	ExternalPointer<User> user1 = new User();
+	user1->age = 98;
+	user1->name = "bar";
+	user1->referal = user;
+	

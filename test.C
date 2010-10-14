@@ -65,6 +65,19 @@ template<typename T> int Reference<T>::offset = offsetof(T, r);
 int User::i = 100;
 
 
+class A1
+{
+private:
+	int i;
+};
+class A2 : A1
+{
+private:
+	A1 f;
+	A2* e; 
+};
+
+
 int f(int a)
 {
 	return 1;
@@ -108,6 +121,9 @@ int main()
 	
 	std::cout << ((int)(user.r.host())) %32 << std::endl;
 	std::cout << (int)(&user) << std::endl;
+	
+	
+	std::cout << sizeof(A2) << std::endl;
 	
 	//~ DBGPRINTF("qwe%s", "123");
 }
