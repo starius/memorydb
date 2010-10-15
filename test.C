@@ -57,6 +57,7 @@ public:
 	int a;
 	//~ Reference<User, offsetof(User, q)> r;
 	
+private:
 	static int i;
 };
 
@@ -121,7 +122,6 @@ int main()
 	
 	std::cout << ((int)(user.r.host())) %32 << std::endl;
 	std::cout << (int)(&user) << std::endl;
-	
 	
 	std::cout << sizeof(A2) << std::endl;
 	

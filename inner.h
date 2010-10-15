@@ -9,6 +9,7 @@ class Inner
 public:
 	T* host() const { return (T*)((char*)this - offset); }
 	int host_id() const { return host()->id(); }
+private:
 	static int offset_;
 };
 
