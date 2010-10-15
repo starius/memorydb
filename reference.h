@@ -11,7 +11,7 @@ template<typename FROM, int from_field,
 class Reference : Inner<FROM, from_field>, LINK_FROM
 {
 public:
-	Reference<TO, to_field, FROM, from_field, LINK_TO, LINK_FROM>* another_ref();
+	//~ Reference<TO, to_field, FROM, from_field, LINK_TO, LINK_FROM>* another_ref();
 private:
 };
 
