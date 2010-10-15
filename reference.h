@@ -2,15 +2,17 @@
 #define MEMORYDB_REFERENCE_H_
 
 #include "inner.h"
-#include "base_link.h"
 
 namespace memorydb {
 
-// REFERENSED is Inner's descendant (it is field)
-
-template<typename T, int int_field, typename REFERENSED>
-class Reference : Inner<T, int_field>, BaseLink<REFERENSED>
+template<typename FROM, int from_field, 
+	typename TO, int to_field, 
+	typename LINK_FROM, typename LINK_TO>
+class Reference : Inner<FROM, from_field>, LINK_FROM
 {
+public:
+	Reference<TO, to_field, FROM, from_field, LINK_TO, LINK_FROM>* another_ref();
+private:
 };
 
 

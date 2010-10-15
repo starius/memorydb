@@ -206,6 +206,7 @@ typedef Reference<FROM, from_field, TO, to_field, BaseLinkSet, BaseLinkSet>
 			dbo::field(a, invited, "invited");
 		}
 	}
+	// macro...
 	
 	ExternalPointer<User> user = new User();
 	user->age = 99;

@@ -17,6 +17,12 @@ class AbstractReference
 };
 
 
+template<typename T, int d>
+class Foo : T
+{
+public:
+	int ref;
+};
 
 
 
@@ -95,6 +101,11 @@ class Df
 	//~ std::vector<int> c;
 };
 
+enum Bar
+{
+	b, c
+};
+
 int main()
 {
 	int r = 34;
@@ -124,6 +135,8 @@ int main()
 	std::cout << (int)(&user) << std::endl;
 	
 	std::cout << sizeof(A2) << std::endl;
+	
+	Foo<User, b> q;
 	
 	//~ DBGPRINTF("qwe%s", "123");
 }
