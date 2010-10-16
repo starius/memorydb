@@ -1,5 +1,5 @@
-#ifndef MEMORYDB_ITEM_H_
-#define MEMORYDB_ITEM_H_
+#ifndef MEMORYDB_BASE_MODEL_H_
+#define MEMORYDB_BASE_MODEL_H_
 
 #include "inner_link_set.h"
 
@@ -17,4 +17,4 @@ private:
 }
 
 
-#endif // MEMORYDB_ITEM_H_
+#endif // MEMORYDB_BASE_MODEL_H_
