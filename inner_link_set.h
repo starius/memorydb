@@ -18,4 +18,6 @@ private:
 }
 
 
+
+
 #endif // MEMORYDB_INNER_LINK_SET_H_

@@ -16,5 +16,6 @@ private:
 
 }
 
+memorydb_init(T, -1, inner_link_set_);
 
 #endif // MEMORYDB_BASE_MODEL_H_
