@@ -13,6 +13,11 @@ inline int id_unpack(void* ID)
 	return ((int)ID) >> 1;
 }
 
+inline bool is_id(void* ID)
+{
+	return ((int)ID) & 1;
+}
+
 }
 
 #endif // MEMORYDB_ID_H_

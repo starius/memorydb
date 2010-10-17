@@ -141,6 +141,9 @@ int main()
 	
 	Foo<User, b> q;
 	
+	int* q1;
+	q1 = NULL;
+	
 	//~ DBGPRINTF("qwe%s", "123");
 }
 
