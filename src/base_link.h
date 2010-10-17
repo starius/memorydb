@@ -17,9 +17,11 @@ public:
 	void set_simple(void* ptr) { ptr_ = ptr; }
 	void set_simple(int ID) { ptr_ = id_pack(ID); }
 	void delete_simple() { ptr_ = NULL; }
+	​bool operator ==(const void* b) const;
 private:
 	void* ptr_;
 };
+
 
 }
 

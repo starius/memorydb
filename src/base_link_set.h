@@ -26,9 +26,10 @@ public:
 	void* get() const { return ptr_; }
 	void unload_simple(void* ptr, int ID);
 	void load_simple(void* ptr, int ID);
-	void delete_simple(void* ptr) { delete_simple(); }
-	void delete_simple(int ID) { delete_simple(); }
+	void delete_simple(void* ptr);
+	void delete_simple(int ID) { delete_simple(id_pack(ID)); }
 private:
+
 	Container<BaseLink> refs_;
 };
 
@@ -41,7 +42,7 @@ void BaseLinkSet::unload_simple(void* ptr, int ID)
 		if (ref == ptr)
 		{
 			ref.set_simple(ID);
-			return;
+			break;
 		}
 	}
 }
@@ -55,11 +56,23 @@ void BaseLinkSet::load_simple(void* ptr, int ID)
 		if (ref == pattern)
 		{
 			ref.set_simple(ptr);
-			return;
+			break;
 		}
 	}
 }
 
+template<>
+void BaseLinkSet::delete_simple(void* ptr)
+{
+	BOOST_FOREACH(BaseLink& ref, refs_)
+	{
+		if (ref == ptr)
+		{
+			ref.set_simple(ptr);
+			break;
+		}
+	}
+}
 
 
 }

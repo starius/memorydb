@@ -17,6 +17,8 @@ class AbstractReference
 };
 
 
+
+
 template<typename T, int d>
 class Foo : T
 {
@@ -108,6 +110,7 @@ enum Bar
 
 int main()
 {
+	
 	int r = 34;
 	double d;
 	d = double(r);
