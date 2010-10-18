@@ -24,6 +24,8 @@ public:
 	
 	bool is_set() const { return ptr_ != 0; }
 	bool is_loaded() const { return !is_id(ptr_); }
+	int neighbour_id() const { return id_unpack(ptr_); }
+	
 private:
 	void* ptr_;
 };

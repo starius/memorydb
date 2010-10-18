@@ -46,7 +46,7 @@ public:
 	typedef Reference<FROM, from_field, TO, to_field, BaseLink, LINK_TO> my_type;
 	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, BaseLink> neighbour_type;
 	
-	neighbour_type* neighbour() {
+	neighbour_type* neighbour() const {
 		// FIXME!!! load neighbour if needed
 		return (neighbour_type*)get();
 	}
@@ -67,6 +67,12 @@ public:
 	void set(TO* to) { set(neighbour_type::from_host(to)); }
 	
 	void erase() { set((void*)0); }
+	
+	void load() {
+		if (!is_loaded()) {
+			set(TO::get(neighbour_id()));
+		}
+	}
 	
 private:
 };

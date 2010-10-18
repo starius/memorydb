@@ -9,6 +9,8 @@ template<typename T>
 class BaseModel
 {
 public:
+	typedef ModelTracker<T> tracker;
+	
 	int id() const { return id_; } // FIXME!!! save if needed
 	bool is_saved() const { return id_ == 0; }
 private:
