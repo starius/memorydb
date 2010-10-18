@@ -28,4 +28,5 @@ int main()
 	a1.o2o.set(&a2);
 	
 	std::cout << a1.o2o.is_set() << std::endl;
+	std::cout << a2.o2o.is_set() << std::endl;
 }

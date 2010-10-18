@@ -64,6 +64,7 @@ public:
 			neighbour()->erase_simple(this);
 		}
 		set_simple(ptr);
+		neighbour()->set_simple(this);
 	}
 	void set(int ID) { set(id_pack(ID)); }
 	void set(neighbour_type* neighbour) { set((void*)neighbour); }
