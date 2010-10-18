@@ -63,9 +63,9 @@ int main()
 	a1.o2o.unload();
 	a2.o2o.unload();
 	
-	// TO BE DONE
-	// сегфолтит так как neighbour недоделан (см FIXME)
-	//~ a1.o2o.set(&a2);
-	//~ assert(a1.o2o.is_loaded() == true);
-	//~ assert(a2.o2o.is_set() == true);
+	a1.o2o.set(&a2);
+	a1.o2o.set(&a2);
+	a1.o2o.set(&a2);
+	assert(a1.o2o.is_loaded() == true);
+	assert(a2.o2o.is_set() == true);
 }
