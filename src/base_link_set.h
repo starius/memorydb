@@ -2,7 +2,7 @@
 #define MEMORYDB_BASELINK_SET_H_
 
 #include <vector>
-#include <boost/foreach.hpp>
+#include <algorithm>
 
 #include "base_link.h"
 
@@ -24,55 +24,64 @@ template<bool ordered=false, bool multi=false, template<typename, typename> clas
 class BaseLinkSet
 {
 public:
+	typedef Container<BaseLink, std::allocator<BaseLink> > LinksContainer;
+	typedef typename LinksContainer::iterator iterator;
+	
+	iterator begin() { return refs_.begin(); } ;
+	iterator end() { return refs_.end(); } ;
+	
 	void* get() const;
 	void unload_simple(void* ptr, int ID);
 	void load_simple(void* ptr, int ID);
 	void delete_simple(void* ptr);
 	void delete_simple(int ID) { delete_simple(id_pack(ID)); }
 private:
-
-	Container<BaseLink, std::allocator<BaseLink> > refs_;
+	 LinksContainer refs_;
+	 iterator find(void* ptr) { return std::find(begin(), end(), ptr); }
+	 iterator find(int ID) { return find(id_pack(ID)); }
 };
 
+ 
 template<>
 void BaseLinkSet<>::unload_simple(void* ptr, int ID) 
 {
-	BOOST_FOREACH(BaseLink& ref, refs_)
+	iterator elm = find(ptr);
+	if (elm != end())
 	{
-		if (ref == ptr)
-		{
-			ref.set_simple(ID);
-			break;
-		}
+		elm->set_simple(ID);
 	}
 }
 
 template<>
 void BaseLinkSet<>::load_simple(void* ptr, int ID) 
 {
-	register void* pattern = id_pack(ID);
-	BOOST_FOREACH(BaseLink& ref, refs_)
+	iterator elm = find(ID);
+	if (elm != end())
 	{
-		if (ref == pattern)
-		{
-			ref.set_simple(ptr);
-			break;
-		}
-	}
+		elm->set_simple(ptr);
+	}	
 }
 
 template<>
 void BaseLinkSet<>::delete_simple(void* ptr)
 {
-	BOOST_FOREACH(BaseLink& ref, refs_)
+	iterator elm = find(ptr);
+	if (elm != end())
 	{
-		if (ref == ptr)
-		{
-			ref.set_simple(ptr);
-			break;
-		}
+		refs_.erase(elm);
 	}
 }
+
+//~ template<>
+//~ void BaseLinkSet<ordered=false>::delete_simple(void* ptr)
+//~ {
+	//~ LinksContainer::iterator elm = find(ptr);
+	//~ if (elm != end())
+	//~ {
+		//~ *elm = refs_.back();
+		//~ refs_.pop_back();
+	//~ }
+//~ }
 
 
 }

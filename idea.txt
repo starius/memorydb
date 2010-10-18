@@ -151,7 +151,7 @@ typedef Reference<FROM, from_field, TO, to_field, BaseLinkSet, BaseLinkSet>
 	delete_simple(указатель или ID):
 		BaseLink: установить соотв. указатель или ID на NULL
 		BaseLinkSet: удалить соотв. указатель или ID на NULL из себя
-			если ordered=false и Container!=list, последний элемент становится на место удаленного
+			если ordered=false, последний элемент становится на место удаленного
 			если ordered=true, происходит сдвиг, чтобы сохранить порядок следования
 			в случае multi=true, удаляется одна связь, а не все
 	set_simple(указатель или ID) -- для BaseLink устанавливает его смотрящим на это
