@@ -4,22 +4,13 @@
 #include <vector>
 #include <algorithm>
 #include <boost/bind.hpp>
+#include <boost/foreach.hpp>
 
 #include "inner.hpp"
 #include "base_link.hpp"
 #include "base_link_set.hpp"
 
 namespace memorydb {
-
-//~ * умеет получать указатели на LINK_TO, на который(ые) ссылается
-//~ * возвращает указатели на Reference<TO, to_field, FROM, from_field, LINK_TO, LINK_FROM>
-	//~ unload() -- превращает все указатели в ID
-	//~ erase() -- обнуляет все ID/указатели или удаляет их в случае BaseLinkSet
-	//~ erase(указатель или ID) -- исключает из себя этот элемент (для BaseLinkSet)
-	//~ set(указатель или ID) -- налаживает связь с этим элементом
-		//~ если LINK_TO=BaseLink, то сначала вызывает у Reference этого элемента erase (если был установлен)
-	//~ load() -- загружает объект(ы), на которые ссылается, устанавливает указатели
-	//~ load(ID) -- (для BaseLinkSet) загружает объект с таким ID
 
 template<typename FROM, int from_field, 
 	typename TO, int to_field, 
@@ -57,9 +48,12 @@ public:
 	TO* to() const { return neighbour()->host(); }
 	
 	void unload() 
-	{ 
-		neighbour()->unload_simple(this, this->host()->id());
-		unload_simple(this, neighbour()->host()->id());
+	{
+		if (is_loaded()) 
+		{
+			neighbour()->unload_simple(this, this->host()->id());
+			unload_simple(this, neighbour()->host()->id());
+		}
 	}
 	
 	void set(BaseLink ptr) 
@@ -100,6 +94,16 @@ public:
 	//~ neighbour_type* operator ->() { return (neighbour_type*)(this->native_iterator::operator->()); }
 //~ };
 
+
+//~ * умеет получать указатели на LINK_TO, на который(ые) ссылается
+//~ * возвращает указатели на Reference<TO, to_field, FROM, from_field, LINK_TO, LINK_FROM>
+	//~ unload() -- превращает все указатели в ID
+	//~ erase() -- обнуляет все ID/указатели или удаляет их в случае BaseLinkSet
+	//~ erase(указатель или ID) -- исключает из себя этот элемент (для BaseLinkSet)
+	//~ set(указатель или ID) -- налаживает связь с этим элементом
+		//~ если LINK_TO=BaseLink, то сначала вызывает у Reference этого элемента erase (если был установлен)
+	//~ load() -- загружает объект(ы), на которые ссылается, устанавливает указатели
+	//~ load(ID) -- (для BaseLinkSet) загружает объект с таким ID
 
 template<typename FROM, int from_field, 
 	typename TO, int to_field, 
@@ -171,6 +175,14 @@ public:
 	{
 		return find(what) != this->end();
 	}
+	
+	void unload() 
+	{
+		BOOST_FOREACH(BaseLink& base_link, this->refs_)
+		{
+		}
+	}
+	
 	
 	//~ neighbour_type* neighbour() const {
 		//~ // FIXME!!! load neighbour if needed

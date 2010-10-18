@@ -11,12 +11,15 @@ using namespace memorydb;
 class A
 {
 public:
+	int id() { return id_; }
 	A(): a(0) {}
 	
 	Reference<A, 1, A, 1, BaseLinkSet<>, BaseLinkSet<> > m2m;
 	Reference<A, 2, A, 2, BaseLink, BaseLink> o2o;
 	
 	int a;
+private:
+	int id_;
 };
 
 memorydb_init(A, 1, m2m);
@@ -44,4 +47,18 @@ int main()
 	
 	assert(a1.o2o.neighbour()->host()->a == 2);
 	assert(a2.o2o.neighbour()->host()->a == 1);
+	
+	assert(a1.o2o.is_loaded() == true);
+	a1.o2o.unload();
+	assert(a1.o2o.is_loaded() == false);
+	a1.o2o.unload();
+	a2.o2o.unload();
+	a1.o2o.unload();
+	a2.o2o.unload();
+	
+	// TO BE DONE
+	// сегфолтит так как neighbour недоделан (см FIXME)
+	//~ a1.o2o.set(&a2);
+	//~ assert(a1.o2o.is_loaded() == true);
+	//~ assert(a2.o2o.is_set() == true);
 }

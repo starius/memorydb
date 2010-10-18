@@ -49,7 +49,7 @@ public:
 	}
 	void set_simple(int ID) { set_simple(BaseLink(ID)); }
 	
-private:
+protected:
 	LinksContainer refs_;
 };
 
