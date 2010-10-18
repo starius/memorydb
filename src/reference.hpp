@@ -20,9 +20,10 @@ namespace memorydb {
 template<typename FROM, int from_field, 
 	typename TO, int to_field, 
 	typename LINK_FROM, typename LINK_TO>
-class Reference : Inner<FROM, from_field>, LINK_FROM
+class Reference : LINK_FROM
 {
 public:
+	FROM* host() { return Inner<FROM, from_field>::host(this); }
 private:
 };
 
@@ -31,9 +32,24 @@ template<typename FROM, int from_field,
 	typename TO, int to_field, 
 	typename LINK_TO>
 class Reference<FROM, from_field, TO, to_field, BaseLink, LINK_TO>
- : Inner<FROM, from_field>, BaseLink
+ : BaseLink
 {
 public:
+	Reference<TO, to_field, FROM, from_field, LINK_TO, BaseLink>* const neighbour() {
+		return (Reference<TO, to_field, FROM, from_field, LINK_TO, BaseLink>*)(get());
+	}
+	
+	void unload() { 
+		unload_simple(this, neighbour()->host()->id());
+		neighbour()->unload_simple(this, this->host()->id());
+	}
+	
+	void set(void* ptr) {
+		if (is_set()) {
+			neighbour()->delete_simple(this);
+		}
+		set_simple(ptr);
+	}
 private:
 };
 

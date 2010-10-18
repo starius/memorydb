@@ -7,8 +7,10 @@ template<typename T, int int_field>
 class Inner
 {
 public:
-	T* host() const { return (T*)((char*)this - offset_); }
-	//~ int host_id() const { return host()->id(); }
+	static T* host(Inner<T, int_field>* inner) { 
+		return (T*)((void*)inner - offset_); }
+	static Inner<T, int_field>* from_host(T* host) { 
+		return (Inner<T, int_field>*)(((void*)host) + offset_); }
 private:
 	static int offset_;
 };

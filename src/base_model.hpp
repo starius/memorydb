@@ -9,6 +9,8 @@ template<typename T>
 class BaseModel
 {
 public:
+	int id() const { return id_; } // FIXME!!! save if needed
+	bool is_saved() const { return id_ == 0; }
 private:
 	InnerLinkSet<T> inner_link_set_;
 	int id_;
