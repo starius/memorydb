@@ -83,14 +83,14 @@ public:
 };
 
 
-template<typename neighbour_type, typename BLS>
-class bls_iterator : BLS::iterator
-{
-	typedef typename BLS::iterator native_iterator;
-public:
-	neighbour_type operator *() { return (neighbour_type)(this->native_iterator::operator*()); }
-	neighbour_type* operator ->() { return (neighbour_type*)(this->native_iterator::operator->()); }
-};
+//~ template<typename neighbour_type, typename BLS>
+//~ class bls_iterator : BLS::iterator
+//~ {
+	//~ typedef typename BLS::iterator native_iterator;
+//~ public:
+	//~ neighbour_type operator *() { return (neighbour_type)(this->native_iterator::operator*()); }
+	//~ neighbour_type* operator ->() { return (neighbour_type*)(this->native_iterator::operator->()); }
+//~ };
 
 
 template<typename FROM, int from_field, 
@@ -104,16 +104,16 @@ public:
 	typedef BaseLinkSet<ordered, multi, Container> BLS;
 	typedef Reference<FROM, from_field, TO, to_field, BLS, LINK_TO> my_type;
 	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, BLS> neighbour_type;
-	typedef bls_iterator<neighbour_type, BLS> iterator;
+	//~ typedef bls_iterator<neighbour_type, BLS> iterator;
 	MEMORYDB_INNER(FROM, from_field, my_type)
 	
-	iterator begin() { return this->BLS::begin(); }
-	iterator end() { return this->BLS::end(); }
+	//~ iterator begin() { return this->BLS::begin(); }
+	//~ iterator end() { return this->BLS::end(); }
 	
 	//FIXME
-	iterator find(neighbour_type ptr) { return this->BLS::find(ptr); }
+	//~ iterator find(neighbour_type ptr) { return this->BLS::find(ptr); }
 	//FIXME
-	iterator find(int ID) { return this->BLS::find(id_pack(ID)); }
+	//~ iterator find(int ID) { return this->BLS::find(id_pack(ID)); }
 	
 	
 	
