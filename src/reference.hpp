@@ -2,6 +2,8 @@
 #define MEMORYDB_REFERENCE_H_
 
 #include <vector>
+#include <algorithm>
+#include <boost/bind.hpp>
 
 #include "id.hpp"
 #include "inner.hpp"
@@ -120,7 +122,9 @@ public:
 			((neighbour_type*)candidate.get())->host_id() == id;
 	}
 	
-	//~ bool has(int ID) { return this->BLS::find(id_pack(ID)); }
+	bool has(int ID) { 
+		return std::find_if(this->begin(), this->end(), boost::bind(cmp_items, _1, BaseLink(ID)));
+	}
 	
 	
 	
