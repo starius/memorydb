@@ -26,7 +26,7 @@ public:
 	bool operator ==(const int b) const { return ptr_ == id_pack(b); }
 	
 	bool is_set() const { return ptr_ != 0; }
-	bool is_loaded() const { return !is_id(ptr_); }
+	bool is_loaded() const { return !is_id(ptr_) && is_set(); }
 	int neighbour_id() const { return id_unpack(ptr_); }
 	
 private:

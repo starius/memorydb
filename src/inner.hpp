@@ -8,10 +8,12 @@ class Inner
 {
 public:
 	static T* host(void* inner) { 
-		return (T*)((void*)inner - offset_); }
+		return (T*)((char*)inner - offset_);
+	}
 	
 	static void* from_host(T* host) { 
-		return (void*)(((void*)host) + offset_); }
+		return (void*)(((char*)host) + offset_);
+	}
 private:
 	static int offset_;
 };

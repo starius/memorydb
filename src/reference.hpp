@@ -31,6 +31,7 @@ private:
 
 #define MEMORYDB_INNER(FROM, from_field, my_type) \
 FROM* host() { return Inner<FROM, from_field>::host((void*)this); } \
+int host_id() { return host()->id(); } \
 static my_type* from_host(FROM* host) { \
 	return (my_type*)(Inner<FROM, from_field>::from_host(host)); \
 }
@@ -55,8 +56,8 @@ public:
 	TO* to() const { return neighbour()->host(); }
 	
 	void unload() { 
-		neighbour()->unload_simple(this, this->host()->id());
-		unload_simple(this, neighbour()->host()->id());
+		neighbour()->unload_simple(this, this->host_id());
+		unload_simple(this, neighbour()->host_id());
 	}
 	
 	void set(void* ptr) {
@@ -113,7 +114,13 @@ public:
 	//FIXME
 	//~ iterator find(neighbour_type ptr) { return this->BLS::find(ptr); }
 	//FIXME
-	//~ iterator find(int ID) { return this->BLS::find(id_pack(ID)); }
+	
+	static bool cmp_items(BaseLink id, BaseLink candidate) {
+		return candidate == id || candidate.is_loaded() && 
+			((neighbour_type*)candidate.get())->host_id() == id;
+	}
+	
+	//~ bool has(int ID) { return this->BLS::find(id_pack(ID)); }
 	
 	
 	
@@ -123,8 +130,8 @@ public:
 	//~ }
 	//~ 
 	//~ void unload() {
-		//~ neighbour()->unload_simple(this, this->host()->id());
-		//~ unload_simple(this, neighbour()->host()->id());
+		//~ neighbour()->unload_simple(this, this->host_id());
+		//~ unload_simple(this, neighbour()->host_id());
 	//~ }
 	//~ 
 	//~ void set(void* ptr) {
