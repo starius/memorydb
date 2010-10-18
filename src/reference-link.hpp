@@ -13,7 +13,6 @@ public:
 	
 	neighbour_type* neighbour() 
 	{
-		// FIXME!!! load neighbour if needed
 		if (!is_loaded())
 		{
 			TO* to = TO::get(neighbour_id());

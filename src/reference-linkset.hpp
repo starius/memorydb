@@ -11,7 +11,6 @@ public:
 	typedef BaseLinkSet<ordered, multi, Container> BLS;
 	typedef Reference<FROM, from_field, TO, to_field, BLS, LINK_TO> my_type;
 	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, BLS> neighbour_type;
-	//~ typedef bls_iterator<neighbour_type, BLS> iterator;
 	typedef typename BLS::iterator iterator;
 	MEMORYDB_INNER(FROM, from_field, my_type)
 	
@@ -33,7 +32,7 @@ public:
 			this->load_simple(BaseLink(n), n->host()->id());
 			n->load_simple(this, this->host()->id());
 		}
-		return (neighbour_type*)(elm->get()); // CHECK IS LOADED
+		return (neighbour_type*)(elm->get());
 	}
 		
 	TO* to(BaseLink ptr) 
