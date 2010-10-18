@@ -7,10 +7,11 @@ template<typename T, int int_field>
 class Inner
 {
 public:
-	static T* host(Inner<T, int_field>* inner) { 
+	static T* host(void* inner) { 
 		return (T*)((void*)inner - offset_); }
-	static Inner<T, int_field>* from_host(T* host) { 
-		return (Inner<T, int_field>*)(((void*)host) + offset_); }
+	
+	static void* from_host(T* host) { 
+		return (void*)(((void*)host) + offset_); }
 private:
 	static int offset_;
 };

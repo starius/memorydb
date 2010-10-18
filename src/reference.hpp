@@ -23,19 +23,17 @@ namespace memorydb {
 template<typename FROM, int from_field, 
 	typename TO, int to_field, 
 	typename LINK_FROM, typename LINK_TO>
-class Reference : LINK_FROM
+class Reference : public LINK_FROM
 {
 public:
-	typedef Reference<FROM, from_field, TO, to_field, LINK_FROM, LINK_TO> my_type;
-	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, LINK_FROM> neighbour_type;
-	
-	FROM* host() { return Inner<FROM, from_field>::host(this); }
-	
-	static my_type from_host(FROM* host) {
-		return Inner<FROM, from_field>::from_host(host);
-	}
 private:
 };
+
+#define MEMORYDB_INNER(FROM, from_field, my_type) \
+FROM* host() { return Inner<FROM, from_field>::host((void*)this); } \
+static my_type* from_host(FROM* host) { \
+	return (my_type*)(Inner<FROM, from_field>::from_host(host)); \
+}
 
 
 template<typename FROM, int from_field, 
@@ -47,6 +45,7 @@ class Reference<FROM, from_field, TO, to_field, BaseLink, LINK_TO>
 public:
 	typedef Reference<FROM, from_field, TO, to_field, BaseLink, LINK_TO> my_type;
 	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, BaseLink> neighbour_type;
+	MEMORYDB_INNER(FROM, from_field, my_type)
 	
 	neighbour_type* neighbour() const {
 		// FIXME!!! load neighbour if needed
@@ -92,6 +91,7 @@ public:
 	typedef BaseLinkSet<ordered, multi, Container> BLS;
 	typedef Reference<FROM, from_field, TO, to_field, BLS, LINK_TO> my_type;
 	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, BLS> neighbour_type;
+	MEMORYDB_INNER(FROM, from_field, my_type)
 	
 	//~ typedef typename LinksContainer::iterator iterator;
 	//~ 

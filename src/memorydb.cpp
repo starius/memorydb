@@ -25,5 +25,7 @@ int main()
 	A a1;
 	A a2;
 	
-	std::cout << a1.m2m.size() << std::endl;
+	a1.o2o.set(&a2);
+	
+	std::cout << a1.o2o.is_set() << std::endl;
 }
