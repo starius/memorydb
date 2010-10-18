@@ -1,6 +1,7 @@
 #ifndef MEMORYDB_REFERENCE_H_
 #define MEMORYDB_REFERENCE_H_
 
+#include "id.hpp"
 #include "inner.hpp"
 #include "base_link.hpp"
 #include "base_link_set.hpp"
@@ -23,7 +24,14 @@ template<typename FROM, int from_field,
 class Reference : LINK_FROM
 {
 public:
+	typedef Reference<FROM, from_field, TO, to_field, LINK_FROM, LINK_TO> my_type;
+	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, LINK_FROM> neighbour_type;
+	
 	FROM* host() { return Inner<FROM, from_field>::host(this); }
+	
+	static my_type from_host(FROM* host) {
+		return Inner<FROM, from_field>::from_host(host);
+	}
 private:
 };
 
@@ -35,8 +43,12 @@ class Reference<FROM, from_field, TO, to_field, BaseLink, LINK_TO>
  : BaseLink
 {
 public:
-	Reference<TO, to_field, FROM, from_field, LINK_TO, BaseLink>* const neighbour() {
-		return (Reference<TO, to_field, FROM, from_field, LINK_TO, BaseLink>*)(get());
+	typedef Reference<FROM, from_field, TO, to_field, BaseLink, LINK_TO> my_type;
+	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, BaseLink> neighbour_type;
+	
+	neighbour_type* const neighbour() {
+		// FIXME!!! load neighbour if needed
+		return (neighbour_type*)(get());
 	}
 	
 	void unload() { 
@@ -50,6 +62,10 @@ public:
 		}
 		set_simple(ptr);
 	}
+	void set(int ID) { set(id_pack(ID)); }
+	void set(neighbour_type* neighbour) { set((void*)neighbour); }
+	void set(TO* to) { set(neighbour_type::from_host(to)); }
+	
 private:
 };
 
