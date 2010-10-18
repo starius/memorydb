@@ -9,6 +9,7 @@ class BaseLink
 {
 public:
 	BaseLink(void* ptr) : ptr_(ptr) {}
+	BaseLink() : ptr_(0) {}
 	
 	void* get() const { return ptr_; }
 	void unload_simple(void* ptr, int ID) { set_simple(ID); }
