@@ -83,6 +83,15 @@ public:
 };
 
 
+template<typename neighbour_type, typename BLS>
+class bls_iterator : BLS::iterator
+{
+	typedef typename BLS::iterator native_iterator;
+public:
+	neighbour_type operator *() { return (neighbour_type)(this->native_iterator::operator*()); }
+	neighbour_type* operator ->() { return (neighbour_type*)(this->native_iterator::operator->()); }
+};
+
 
 template<typename FROM, int from_field, 
 	typename TO, int to_field, 
@@ -95,6 +104,7 @@ public:
 	typedef BaseLinkSet<ordered, multi, Container> BLS;
 	typedef Reference<FROM, from_field, TO, to_field, BLS, LINK_TO> my_type;
 	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, BLS> neighbour_type;
+	typedef bls_iterator<neighbour_type, BLS> iterator;
 	MEMORYDB_INNER(FROM, from_field, my_type)
 	
 	//~ typedef typename LinksContainer::iterator iterator;
