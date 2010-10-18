@@ -7,8 +7,11 @@ using namespace memorydb;
 
 class A
 {
+public:
 	Reference<A, 1, A, 1, BaseLinkSet<>, BaseLinkSet<> > ref;
 };
+
+memorydb_init(A, 1, ref);
 
 
 int main()

@@ -16,7 +16,7 @@ private:
 };
 
 #define memorydb_init(T, int_field, field) \
-template<typename T, int int_field> int Inner<T, int_field>::offset_ = offsetof(T, field);
+template<> int Inner<T, int_field>::offset_ = offsetof(T, field);
 
 }
 
