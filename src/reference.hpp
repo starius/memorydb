@@ -72,7 +72,7 @@ public:
 		neighbour()->set_simple(this);
 	}
 	void set(int ID) { set(BaseLink(ID)); }
-	void set(neighbour_type* neighbour) { set((void*)neighbour); }
+	void set(neighbour_type* neighbour) { set(BaseLink(neighbour)); }
 	void set(TO* to) { set(neighbour_type::from_host(to)); }
 	
 	void erase() 
@@ -162,10 +162,9 @@ public:
 		}
 	}
 	
-	iterator find(int ID) 
-	{ 
-		return find(BaseLink(ID));
-	}
+	iterator find(int ID) { return find(BaseLink(ID)); }
+	iterator find(neighbour_type* neighbour) { return find(BaseLink(neighbour)); }
+	iterator find(TO* to) { return find(neighbour_type::from_host(to)); }
 	
 	template<typename T>
 	bool has(T what) 
