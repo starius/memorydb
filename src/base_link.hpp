@@ -1,14 +1,17 @@
 #ifndef MEMORYDB_BASE_LINK_H_
 #define MEMORYDB_BASE_LINK_H_
 
-#include "id.hpp"
-
 namespace memorydb {
+
+inline void* id_pack(int ID)
+{
+	return (void*)((ID << 1) | 1);
+}
 
 class BaseLink
 {
 public:
-	BaseLink(int id) : ptr_(id_pack(id)) {}
+	BaseLink(int ID) : ptr_(id_pack(ID)) { }
 	BaseLink(void* ptr) : ptr_(ptr) {}
 	BaseLink() : ptr_(0) {}
 	void* get_ptr() const { return ptr_; }
@@ -24,11 +27,12 @@ public:
 	void set_simple(int ID) { ptr_ = id_pack(ID); }
 	bool operator ==(const BaseLink b) const { return ptr_ == b.get_ptr(); }
 	bool operator ==(const void* b) const { return ptr_ == b; }
-	bool operator ==(const int b) const { return ptr_ == id_pack(b); }
+	bool operator ==(const int b) const { return *this == BaseLink(b); }
 	
 	bool is_set() const { return ptr_ != 0; }
-	bool is_loaded() const { return !is_id(ptr_) && is_set(); }
-	int neighbour_id() const { return id_unpack(ptr_); }
+	bool is_id() const { return ((int)ptr_) & 1; }
+	bool is_loaded() const { return !is_id() && is_set(); }
+	int neighbour_id() const { return ((int)ptr_) >> 1; }
 	
 private:
 	void* ptr_;

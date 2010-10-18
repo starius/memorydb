@@ -5,7 +5,6 @@
 #include <algorithm>
 #include <boost/bind.hpp>
 
-#include "id.hpp"
 #include "inner.hpp"
 #include "base_link.hpp"
 #include "base_link_set.hpp"
@@ -33,7 +32,6 @@ private:
 
 #define MEMORYDB_INNER(FROM, from_field, my_type) \
 FROM* host() { return Inner<FROM, from_field>::host((void*)this); } \
-int host_id() { return host()->id(); } \
 static my_type* from_host(FROM* host) { \
 	return (my_type*)(Inner<FROM, from_field>::from_host(host)); \
 }
@@ -50,36 +48,43 @@ public:
 	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, BaseLink> neighbour_type;
 	MEMORYDB_INNER(FROM, from_field, my_type)
 	
-	neighbour_type* neighbour() const {
+	neighbour_type* neighbour() const 
+	{
 		// FIXME!!! load neighbour if needed
 		return (neighbour_type*)get();
 	}
 	
 	TO* to() const { return neighbour()->host(); }
 	
-	void unload() { 
-		neighbour()->unload_simple(this, this->host_id());
-		unload_simple(this, neighbour()->host_id());
+	void unload() 
+	{ 
+		neighbour()->unload_simple(this, this->host()->id());
+		unload_simple(this, neighbour()->host()->id());
 	}
 	
-	void set(void* ptr) {
-		if (is_set()) {
+	void set(BaseLink ptr) 
+	{
+		if (is_set()) 
+		{
 			neighbour()->erase_simple(this);
 		}
 		set_simple(ptr);
 		neighbour()->set_simple(this);
 	}
-	void set(int ID) { set(id_pack(ID)); }
+	void set(int ID) { set(BaseLink(ID)); }
 	void set(neighbour_type* neighbour) { set((void*)neighbour); }
 	void set(TO* to) { set(neighbour_type::from_host(to)); }
 	
-	void erase() { 
+	void erase() 
+	{ 
 		neighbour()->erase_simple(this);
 		erase_simple();
 	}
 	
-	void load() {
-		if (!is_loaded()) {
+	void load() 
+	{
+		if (!is_loaded()) 
+		{
 			set(TO::get(neighbour_id()));
 		}
 	}
@@ -117,13 +122,48 @@ public:
 	//~ iterator find(neighbour_type ptr) { return this->BLS::find(ptr); }
 	//FIXME
 	
-	static bool cmp_items(BaseLink id, BaseLink candidate) {
-		return candidate == id || candidate.is_loaded() && 
-			((neighbour_type*)candidate.get())->host_id() == id;
+	static neighbour_type* neighbour(BaseLink ptr) 
+	{
+		return (neighbour_type*)(ptr.get()); // CHECK IS LOADED
 	}
 	
-	bool has(int ID) { 
-		return std::find_if(this->begin(), this->end(), boost::bind(cmp_items, _1, BaseLink(ID)));
+	static TO* to(BaseLink ptr) 
+	{
+		return neighbour()->host();
+	}	
+	
+	static bool cmp_items_id(BaseLink candidate, BaseLink id) 
+	{
+		return candidate == id || candidate.is_loaded() && to(candidate)->id() == id;
+	}
+	
+	static bool cmp_items_ptr(BaseLink candidate, BaseLink ptr, BaseLink id) 
+	{
+		return candidate == ptr || !candidate.is_loaded() && candidate == id;
+	}
+	
+	
+	bool has(BaseLink base_link) 
+	{
+		if (base_link.is_id()) 
+		{
+			return std::find_if(this->begin(), this->end(), 
+				boost::bind(cmp_items_id, _1, base_link));
+		}
+		else if (base_link.is_loaded()) 
+		{
+			return std::find_if(this->begin(), this->end(), 
+				boost::bind(cmp_items_ptr, _1, base_link, BaseLink(base_link)));
+		}
+		else 
+		{
+			return false;
+		}
+	}
+	
+	bool has(int ID) 
+	{ 
+		return has(BaseLink(ID));
 	}
 	
 	
@@ -134,8 +174,8 @@ public:
 	//~ }
 	//~ 
 	//~ void unload() {
-		//~ neighbour()->unload_simple(this, this->host_id());
-		//~ unload_simple(this, neighbour()->host_id());
+		//~ neighbour()->unload_simple(this, this->host()->id());
+		//~ unload_simple(this, neighbour()->host()->id());
 	//~ }
 	//~ 
 	//~ void set(void* ptr) {
@@ -144,7 +184,7 @@ public:
 		//~ }
 		//~ set_simple(ptr);
 	//~ }
-	//~ void set(int ID) { set(id_pack(ID)); }
+	//~ void set(int ID) { set(BaseLink(ID)); }
 	//~ void set(neighbour_type* neighbour) { set((void*)neighbour); }
 	//~ void set(TO* to) { set(neighbour_type::from_host(to)); }
 	//~ 
