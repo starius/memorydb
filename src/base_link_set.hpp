@@ -45,7 +45,7 @@ public:
 	void set_simple(int ID) { set_simple(id_pack(ID)); }
 	
 private:
-	 LinksContainer refs_;
+	LinksContainer refs_;
 };
 
  

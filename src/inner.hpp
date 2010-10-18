@@ -7,7 +7,7 @@ template<typename T, int int_field>
 class Inner
 {
 public:
-	T* host() const { return (T*)((char*)this - offset); }
+	T* host() const { return (T*)((char*)this - offset_); }
 	//~ int host_id() const { return host()->id(); }
 private:
 	static int offset_;
