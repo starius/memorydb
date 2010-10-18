@@ -107,8 +107,13 @@ public:
 	typedef bls_iterator<neighbour_type, BLS> iterator;
 	MEMORYDB_INNER(FROM, from_field, my_type)
 	
-	//~ typedef typename LinksContainer::iterator iterator;
-	//~ 
+	//~ iterator begin() { return this->BLS::begin(); }
+	//~ iterator end() { return this->BLS::end(); }
+	//~ iterator find(BaseLink ptr) { return this->BLS::find((void*)ptr); }
+	//~ iterator find(int ID) { return find(id_pack(ID)); }
+	
+	
+	
 	//~ neighbour_type* neighbour() const {
 		//~ // FIXME!!! load neighbour if needed
 		//~ return (neighbour_type*)get();

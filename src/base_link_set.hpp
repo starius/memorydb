@@ -19,11 +19,11 @@ public:
 	iterator end() { return refs_.end(); }
 	int size() const { return refs_.size(); }
 	bool empty() const { return refs_.empty(); }
-	iterator find(void* ptr) { return std::find(begin(), end(), ptr); }
+	iterator find(BaseLink ptr) { return std::find(begin(), end(), ptr); }
 	iterator find(int ID) { return find(id_pack(ID)); }
 	
-	void unload_simple(void* ptr, int ID);
-	void load_simple(void* ptr, int ID);
+	void unload_simple(BaseLink ptr, int ID);
+	void load_simple(BaseLink ptr, int ID);
 	
 	void erase_simple(iterator elm) {
 		if (ordered) { 
@@ -34,10 +34,10 @@ public:
 			refs_.pop_back();
 		}
 	}
-	void erase_simple(void* ptr);
+	void erase_simple(BaseLink ptr);
 	void erase_simple(int ID) { erase_simple(id_pack(ID)); }
 	
-	void set_simple(void* ptr) { 
+	void set_simple(BaseLink ptr) { 
 		if (multi || find(ptr) == end()) {
 			refs_.push_back(BaseLink(ptr));
 		}
@@ -50,7 +50,7 @@ private:
 
  
 template<>
-void BaseLinkSet<>::unload_simple(void* ptr, int ID) 
+void BaseLinkSet<>::unload_simple(BaseLink ptr, int ID) 
 {
 	iterator elm = find(ptr);
 	if (elm != end())
@@ -60,7 +60,7 @@ void BaseLinkSet<>::unload_simple(void* ptr, int ID)
 }
 
 template<>
-void BaseLinkSet<>::load_simple(void* ptr, int ID) 
+void BaseLinkSet<>::load_simple(BaseLink ptr, int ID) 
 {
 	iterator elm = find(ID);
 	if (elm != end())
@@ -70,7 +70,7 @@ void BaseLinkSet<>::load_simple(void* ptr, int ID)
 }
 
 template<>
-void BaseLinkSet<>::erase_simple(void* ptr)
+void BaseLinkSet<>::erase_simple(BaseLink ptr)
 {
 	iterator elm = find(ptr);
 	if (elm != end())
