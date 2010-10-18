@@ -1,6 +1,8 @@
 #ifndef MEMORYDB_REFERENCE_H_
 #define MEMORYDB_REFERENCE_H_
 
+#include <vector>
+
 #include "id.hpp"
 #include "inner.hpp"
 #include "base_link.hpp"
@@ -51,6 +53,8 @@ public:
 		return (neighbour_type*)get();
 	}
 	
+	TO* to() const { return neighbour()->host(); }
+	
 	void unload() { 
 		neighbour()->unload_simple(this, this->host()->id());
 		unload_simple(this, neighbour()->host()->id());
@@ -73,9 +77,54 @@ public:
 			set(TO::get(neighbour_id()));
 		}
 	}
-	
-private:
 };
+
+
+
+template<typename FROM, int from_field, 
+	typename TO, int to_field, 
+	typename LINK_TO, 
+	bool ordered, bool multi, template<typename, typename> class Container>
+class Reference<FROM, from_field, TO, to_field, BaseLinkSet<ordered, multi, Container>, LINK_TO>
+ : BaseLinkSet<ordered, multi, Container>
+{
+public:
+	typedef BaseLinkSet<ordered, multi, Container> BLS;
+	typedef Reference<FROM, from_field, TO, to_field, BLS, LINK_TO> my_type;
+	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, BLS> neighbour_type;
+	
+	//~ typedef typename LinksContainer::iterator iterator;
+	//~ 
+	//~ neighbour_type* neighbour() const {
+		//~ // FIXME!!! load neighbour if needed
+		//~ return (neighbour_type*)get();
+	//~ }
+	//~ 
+	//~ void unload() {
+		//~ neighbour()->unload_simple(this, this->host()->id());
+		//~ unload_simple(this, neighbour()->host()->id());
+	//~ }
+	//~ 
+	//~ void set(void* ptr) {
+		//~ if (is_set()) {
+			//~ neighbour()->erase_simple(this);
+		//~ }
+		//~ set_simple(ptr);
+	//~ }
+	//~ void set(int ID) { set(id_pack(ID)); }
+	//~ void set(neighbour_type* neighbour) { set((void*)neighbour); }
+	//~ void set(TO* to) { set(neighbour_type::from_host(to)); }
+	//~ 
+	//~ void erase() { set((void*)0); }
+	//~ 
+	//~ void load() {
+		//~ if (!is_loaded()) {
+			//~ set(TO::get(neighbour_id()));
+		//~ }
+	//~ }
+};
+
+
 
 
 }
