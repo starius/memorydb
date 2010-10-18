@@ -4,8 +4,16 @@
 
 using namespace memorydb;
 
+
+class A
+{
+	Reference<A, 1, A, 1, BaseLinkSet<>, BaseLinkSet<> > ref;
+};
+
+
 int main()
 {
 	BaseLink base_link;
 	BaseLinkSet<> base_link_set;
+	
 }
