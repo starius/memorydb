@@ -113,6 +113,7 @@ public:
 	typedef Reference<FROM, from_field, TO, to_field, BLS, LINK_TO> my_type;
 	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, BLS> neighbour_type;
 	//~ typedef bls_iterator<neighbour_type, BLS> iterator;
+	typedef typename BLS::iterator iterator;
 	MEMORYDB_INNER(FROM, from_field, my_type)
 	
 	//~ iterator begin() { return this->BLS::begin(); }
@@ -129,7 +130,7 @@ public:
 	
 	static TO* to(BaseLink ptr) 
 	{
-		return neighbour()->host();
+		return neighbour(ptr)->host();
 	}	
 	
 	static bool cmp_items_id(BaseLink candidate, BaseLink id) 
@@ -143,7 +144,7 @@ public:
 	}
 	
 	
-	bool has(BaseLink base_link) 
+	iterator find(BaseLink base_link) 
 	{
 		if (base_link.is_id()) 
 		{
@@ -157,16 +158,20 @@ public:
 		}
 		else 
 		{
-			return false;
+			return this->end();
 		}
 	}
 	
-	bool has(int ID) 
+	iterator find(int ID) 
 	{ 
-		return has(BaseLink(ID));
+		return find(BaseLink(ID));
 	}
 	
-	
+	template<typename T>
+	bool has(T what) 
+	{
+		return find(what) != this->end();
+	}
 	
 	//~ neighbour_type* neighbour() const {
 		//~ // FIXME!!! load neighbour if needed
