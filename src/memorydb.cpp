@@ -10,10 +10,12 @@ using namespace memorydb;
 class A
 {
 public:
-	Reference<A, 1, A, 1, BaseLinkSet<>, BaseLinkSet<> > ref;
+	Reference<A, 1, A, 1, BaseLinkSet<>, BaseLinkSet<> > m2m;
+	Reference<A, 2, A, 2, BaseLink, BaseLink> o2o;
 };
 
-memorydb_init(A, 1, ref);
+memorydb_init(A, 1, m2m);
+memorydb_init(A, 2, o2o);
 
 
 int main()
@@ -23,5 +25,5 @@ int main()
 	A a1;
 	A a2;
 	
-	std::cout << a1.ref.size() << std::endl;
+	std::cout << a1.m2m.size() << std::endl;
 }
