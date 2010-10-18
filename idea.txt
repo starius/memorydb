@@ -166,7 +166,7 @@ typedef Reference<FROM, from_field, TO, to_field, BaseLinkSet, BaseLinkSet>
 		set(указатель или ID) -- налаживает связь с этим элементом
 			если LINK_TO=BaseLink, то сначала вызывает у Reference этого элемента erase (если был установлен)
 		load() -- загружает объект(ы), на которые ссылается, устанавливает указатели
-		load(ID) -- (для BaseLinkSet) загружает объект с таким ID
+		//load(ID) -- (для BaseLinkSet) загружает объект с таким ID
 
 
 Методы Reference:

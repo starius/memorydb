@@ -39,20 +39,27 @@ public:
 	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, BaseLink> neighbour_type;
 	MEMORYDB_INNER(FROM, from_field, my_type)
 	
-	neighbour_type* neighbour() const 
+	neighbour_type* neighbour() 
 	{
 		// FIXME!!! load neighbour if needed
+		if (!is_loaded())
+		{
+			TO* to = TO::get(neighbour_id());
+			neighbour_type* n = neighbour_type::from_host(to);
+			this->load_simple(BaseLink(n), n->host()->id());
+			n->load_simple(this, this->host()->id());
+		}
 		return (neighbour_type*)get();
 	}
 	
-	TO* to() const { return neighbour()->host(); }
+	TO* to() { return neighbour()->host(); }
 	
 	void unload() 
 	{
 		if (is_loaded()) 
 		{
 			neighbour()->unload_simple(this, this->host()->id());
-			unload_simple(this, neighbour()->host()->id());
+			this->unload_simple(this, neighbour()->host()->id());
 		}
 	}
 	
@@ -62,7 +69,7 @@ public:
 		{
 			neighbour()->erase_simple(this);
 		}
-		set_simple(ptr);
+		this->set_simple(ptr);
 		neighbour()->set_simple(this);
 	}
 	void set(int ID) { set(BaseLink(ID)); }
@@ -70,29 +77,24 @@ public:
 	void set(TO* to) { set(neighbour_type::from_host(to)); }
 	
 	void erase() 
-	{ 
-		neighbour()->erase_simple(this);
-		erase_simple();
-	}
-	
-	void load() 
 	{
-		if (!is_loaded()) 
+		if (is_set())  // IS IT NEEDED ??
 		{
-			set(TO::get(neighbour_id()));
+			neighbour()->erase_simple(this);
+			this->erase_simple();
 		}
 	}
+
+//~ private:
+	//~ void load() 
+	//~ {
+		//~ if (!is_loaded()) 
+		//~ {
+			//~ set(TO::get(neighbour_id()));
+		//~ }
+	//~ }
 };
 
-
-//~ template<typename neighbour_type, typename BLS>
-//~ class bls_iterator : BLS::iterator
-//~ {
-	//~ typedef typename BLS::iterator native_iterator;
-//~ public:
-	//~ neighbour_type operator *() { return (neighbour_type)(this->native_iterator::operator*()); }
-	//~ neighbour_type* operator ->() { return (neighbour_type*)(this->native_iterator::operator->()); }
-//~ };
 
 
 //~ * умеет получать указатели на LINK_TO, на который(ые) ссылается
@@ -120,22 +122,31 @@ public:
 	typedef typename BLS::iterator iterator;
 	MEMORYDB_INNER(FROM, from_field, my_type)
 	
-	//~ iterator begin() { return this->BLS::begin(); }
-	//~ iterator end() { return this->BLS::end(); }
-	
-	//FIXME
-	//~ iterator find(neighbour_type ptr) { return this->BLS::find(ptr); }
-	//FIXME
-	
-	static neighbour_type* neighbour(BaseLink ptr) 
+	neighbour_type* neighbour(BaseLink ptr) 
 	{
-		return (neighbour_type*)(ptr.get()); // CHECK IS LOADED
+		if (!ptr.is_loaded())
+		{
+			neighbour(find(ptr));
+		}
+		return (neighbour_type*)(ptr.get());
 	}
 	
-	static TO* to(BaseLink ptr) 
+	neighbour_type* neighbour(iterator elm) 
+	{
+		if (!elm->is_loaded())
+		{
+			TO* to = TO::get(elm->neighbour_id());
+			neighbour_type* n = neighbour_type::from_host(to);
+			this->load_simple(BaseLink(n), n->host()->id());
+			n->load_simple(this, this->host()->id());
+		}
+		return (neighbour_type*)(elm->get()); // CHECK IS LOADED
+	}
+		
+	TO* to(BaseLink ptr) 
 	{
 		return neighbour(ptr)->host();
-	}	
+	}
 	
 	static bool cmp_items_id(BaseLink candidate, BaseLink id) 
 	{
@@ -178,39 +189,66 @@ public:
 	
 	void unload() 
 	{
-		BOOST_FOREACH(BaseLink& base_link, this->refs_)
+		for (iterator elm = this->begin(); elm < this->end(); ++elm)
 		{
+			if (elm->is_loaded())
+			{
+				neighbour(elm)->unload_simple(this, this->host()->id());
+				elm->unload_simple(this, neighbour(elm)->host()->id());
+			}
 		}
 	}
 	
+	void erase() 
+	{
+		for (iterator elm = this->begin(); elm < this->end(); ++elm)
+		{
+			neighbour(elm)->erase_simple(this, this->host()->id());
+		}
+		this->refs_.clear();
+	}
 	
-	//~ neighbour_type* neighbour() const {
-		//~ // FIXME!!! load neighbour if needed
-		//~ return (neighbour_type*)get();
-	//~ }
-	//~ 
-	//~ void unload() {
-		//~ neighbour()->unload_simple(this, this->host()->id());
-		//~ unload_simple(this, neighbour()->host()->id());
-	//~ }
-	//~ 
-	//~ void set(void* ptr) {
-		//~ if (is_set()) {
-			//~ neighbour()->erase_simple(this);
-		//~ }
-		//~ set_simple(ptr);
-	//~ }
-	//~ void set(int ID) { set(BaseLink(ID)); }
-	//~ void set(neighbour_type* neighbour) { set((void*)neighbour); }
-	//~ void set(TO* to) { set(neighbour_type::from_host(to)); }
-	//~ 
-	//~ void erase() { set((void*)0); }
-	//~ 
-	//~ void load() {
-		//~ if (!is_loaded()) {
-			//~ set(TO::get(neighbour_id()));
-		//~ }
-	//~ }
+	void erase(BaseLink ptr) 
+	{
+		iterator elm = find(ptr);
+		if (elm != this->end())
+		{
+			neighbour(elm)->erase_simple(this, this->host()->id());
+			this->refs_.erase_simple(elm);
+		}
+	}
+	
+	void erase(int ID) { erase(BaseLink(ID)); }
+	void erase(neighbour_type* neighbour) { erase(BaseLink(neighbour)); }
+	void erase(TO* to) { erase(neighbour_type::from_host(to)); }
+	
+	
+	void set(BaseLink ptr) 
+	{
+		if (multi || !has(ptr)) 
+		{
+			this->set_simple(ptr);
+			neighbour(ptr)->set_simple(this);
+		}
+	}	
+	
+	void set(int ID) { set(BaseLink(ID)); }
+	void set(neighbour_type* neighbour) { set(BaseLink(neighbour)); }
+	void set(TO* to) { set(neighbour_type::from_host(to)); }
+	
+	
+	void load() 
+	{
+		for (iterator elm = this->begin(); elm < this->end(); ++elm)
+		{
+			if (!elm->is_loaded())
+			{
+				neighbour(elm)->load_simple(this, this->host()->id());
+				elm->load_simple(this, neighbour(elm)->host()->id());
+			}
+		}
+	}
+	
 };
 
 

@@ -13,11 +13,18 @@ class A
 public:
 	int id() { return id_; }
 	A(): a(0) {}
+	A(int id): id_(id) {}
 	
 	Reference<A, 1, A, 1, BaseLinkSet<>, BaseLinkSet<> > m2m;
 	Reference<A, 2, A, 2, BaseLink, BaseLink> o2o;
 	
 	int a;
+	
+	static A* get(int ID)
+	{
+		// костыль
+		return new A(ID);
+	}
 private:
 	int id_;
 };

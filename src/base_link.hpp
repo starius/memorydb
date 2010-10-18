@@ -12,16 +12,17 @@ class BaseLink
 {
 public:
 	BaseLink(int ID) : ptr_(id_pack(ID)) { }
-	BaseLink(void* ptr) : ptr_(ptr) {}
+	template<typename T>
+	BaseLink(T* ptr) : ptr_((void*)ptr) {}
 	BaseLink() : ptr_(0) {}
 	void* get_ptr() const { return ptr_; }
 	
 	void* get() const { return ptr_; }
-	void unload_simple(BaseLink ptr, int ID) { set_simple(ID); }
-	void load_simple(BaseLink ptr, int ID) { set_simple(ptr); }
+	void unload_simple(BaseLink /* ptr */, int ID) { set_simple(ID); }
+	void load_simple(BaseLink ptr, int /* ID */) { set_simple(ptr); }
 	void erase_simple() { ptr_ = 0; }
-	void erase_simple(BaseLink ptr) { erase_simple(); }
-	void erase_simple(int ID) { erase_simple(); }
+	void erase_simple(BaseLink /* ptr */) { erase_simple(); }
+	void erase_simple(int /* ID */ ) { erase_simple(); }
 	
 	void set_simple(BaseLink ptr) { ptr_ = ptr.get_ptr(); }
 	void set_simple(int ID) { ptr_ = id_pack(ID); }
