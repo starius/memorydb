@@ -1,7 +1,7 @@
 #ifndef MEMORYDB_RELATION_H_
 #define MEMORYDB_RELATION_H_
 
-#include "reference.h"
+#include "reference.hpp"
 
 namespace memorydb {
 

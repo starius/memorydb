@@ -4,7 +4,7 @@
 #include <vector>
 #include <algorithm>
 
-#include "base_link.h"
+#include "base_link.hpp"
 
 //~ Методы BaseLink и BaseLinkSet (указатели везде тут BaseLink или BaseLinkSet) 
 	//~ unload_simple(указатель, ID) -- исправиль указанный указатель внутри себя на соответствующий ID

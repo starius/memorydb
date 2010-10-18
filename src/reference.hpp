@@ -1,7 +1,7 @@
 #ifndef MEMORYDB_REFERENCE_H_
 #define MEMORYDB_REFERENCE_H_
 
-#include "inner.h"
+#include "inner.hpp"
 
 namespace memorydb {
 

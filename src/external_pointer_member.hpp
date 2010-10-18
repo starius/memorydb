@@ -1,9 +1,9 @@
 #ifndef MEMORYDB_EXTERNAL_POINTER_MEMBER_H_
 #define MEMORYDB_EXTERNAL_POINTER_MEMBER_H_
 
-#include "base_link_set.h"
-#include "base_link.h"
-#include "reference.h"
+#include "base_link_set.hpp"
+#include "base_link.hpp"
+#include "reference.hpp"
 
 namespace memorydb {
 

@@ -1,10 +1,10 @@
 #ifndef MEMORYDB_INNER_LINK_SET_H_
 #define MEMORYDB_INNER_LINK_SET_H_
 
-#include "base_link_set.h"
-#include "base_link.h"
-#include "reference.h"
-#include "external_pointer.h"
+#include "base_link_set.hpp"
+#include "base_link.hpp"
+#include "reference.hpp"
+#include "external_pointer.hpp"
 
 namespace memorydb {
 

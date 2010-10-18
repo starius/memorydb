@@ -1,7 +1,7 @@
 #ifndef MEMORYDB_BASE_MODEL_H_
 #define MEMORYDB_BASE_MODEL_H_
 
-#include "inner_link_set.h"
+#include "inner_link_set.hpp"
 
 namespace memorydb {
 

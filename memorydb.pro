@@ -2,7 +2,7 @@ CONFIG -= release
 CONFIG -= debug
 TARGET = memorydb.exe
 
-SOURCES = src/memorydb.C
+SOURCES = src/memorydb.cpp
 
 
 CONFIG += debug

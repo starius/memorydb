@@ -1,8 +1,8 @@
 #ifndef MEMORYDB_TRACKER_H_
 #define MEMORYDB_TRACKER_H_
 
-#include "reference.h"
-#include "item.h"
+#include "reference.hpp"
+#include "item.hpp"
 #include <map>
 
 namespace memorydb {

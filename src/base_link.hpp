@@ -1,7 +1,7 @@
 #ifndef MEMORYDB_BASE_LINK_H_
 #define MEMORYDB_BASE_LINK_H_
 
-#include "id.h"
+#include "id.hpp"
 
 namespace memorydb {
 

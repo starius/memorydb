@@ -1,7 +1,7 @@
 #ifndef MEMORYDB_EXTERNAL_POINTER_H_
 #define MEMORYDB_EXTERNAL_POINTER_H_
 
-#include "external_pointer_member.h"
+#include "external_pointer_member.hpp"
 
 namespace memorydb {
 
