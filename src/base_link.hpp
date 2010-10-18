@@ -8,6 +8,8 @@ namespace memorydb {
 class BaseLink
 {
 public:
+	BaseLink(void* ptr) : ptr_(ptr) {}
+	
 	void* get() const { return ptr_; }
 	void unload_simple(void* ptr, int ID) { set_simple(ID); }
 	void load_simple(void* ptr, int ID) { set_simple(ptr); }
