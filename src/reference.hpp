@@ -70,7 +70,10 @@ public:
 	void set(neighbour_type* neighbour) { set((void*)neighbour); }
 	void set(TO* to) { set(neighbour_type::from_host(to)); }
 	
-	void erase() { set((void*)0); }
+	void erase() { 
+		neighbour()->erase_simple(this);
+		erase_simple();
+	}
 	
 	void load() {
 		if (!is_loaded()) {

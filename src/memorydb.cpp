@@ -26,7 +26,9 @@ int main()
 	A a2;
 	
 	a1.o2o.set(&a2);
-	
+	a2.o2o.set(&a2);
+	a2.o2o.erase();
+
 	std::cout << a1.o2o.is_set() << std::endl;
 	std::cout << a2.o2o.is_set() << std::endl;
 }
