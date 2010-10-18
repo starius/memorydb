@@ -122,7 +122,7 @@ Tracker
 для ExternalPointer возможно копирование, сопровождаемое созданием новых связей
 копировать Relation или InnerLinkSet нельзя
 деструктор Relation вызывает unload
-деструктор ExternalPointer вызывает delete
+деструктор ExternalPointer вызывает erase
 деструктор InnerLinkSet вызывает unload
 для Reference<LINK_FROM=BaseLink> и ExternalPointer определено ->, 
 	возвращающее объект модели, на который ссылаются
@@ -148,7 +148,7 @@ typedef Reference<FROM, from_field, TO, to_field, BaseLinkSet, BaseLinkSet>
 Методы BaseLink и BaseLinkSet (указатели везде тут BaseLink или BaseLinkSet) 
 	unload_simple(указатель, ID) -- исправиль указанный указатель внутри себя на соответствующий ID
 	load_simple(указатель, ID) -- обратное к unload_simple
-	delete_simple(указатель или ID):
+	erase_simple(указатель или ID):
 		BaseLink: установить соотв. указатель или ID на NULL
 		BaseLinkSet: удалить соотв. указатель или ID на NULL из себя
 			если ordered=false, последний элемент становится на место удаленного
@@ -161,10 +161,10 @@ typedef Reference<FROM, from_field, TO, to_field, BaseLinkSet, BaseLinkSet>
 	эти методы работают не только с своим объектом, но и 
 	с принимающей ссылкой того, на который ссылаются
 		unload() -- превращает все указатели в ID
-		delete() -- обнуляет все ID/указатели или удаляет их в случае BaseLinkSet
-		delete(указатель или ID) -- исключает из себя этот элемент (для BaseLinkSet)
+		erase() -- обнуляет все ID/указатели или удаляет их в случае BaseLinkSet
+		erase(указатель или ID) -- исключает из себя этот элемент (для BaseLinkSet)
 		set(указатель или ID) -- налаживает связь с этим элементом
-			если LINK_TO=BaseLink, то сначала вызывает у Reference этого элемента delete (если был установлен)
+			если LINK_TO=BaseLink, то сначала вызывает у Reference этого элемента erase (если был установлен)
 		load() -- загружает объект(ы), на которые ссылается, устанавливает указатели
 		load(ID) -- (для BaseLinkSet) загружает объект с таким ID
 

@@ -13,12 +13,12 @@ public:
 	void* get() const { return ptr_; }
 	void unload_simple(void* ptr, int ID) { set_simple(ID); }
 	void load_simple(void* ptr, int ID) { set_simple(ptr); }
-	void delete_simple(void* ptr) { delete_simple(); }
-	void delete_simple(int ID) { delete_simple(); }
+	void erase_simple(void* ptr) { erase_simple(); }
+	void erase_simple(int ID) { erase_simple(); }
 	
 	void set_simple(void* ptr) { ptr_ = ptr; }
 	void set_simple(int ID) { ptr_ = id_pack(ID); }
-	void delete_simple() { ptr_ = 0; }
+	void erase_simple() { ptr_ = 0; }
 	bool operator ==(const void* b) const { return ptr_ == b; }
 	bool operator ==(const int b) const { return ptr_ == id_pack(b); }
 	

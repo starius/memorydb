@@ -11,10 +11,10 @@ namespace memorydb {
 //~ * умеет получать указатели на LINK_TO, на который(ые) ссылается
 //~ * возвращает указатели на Reference<TO, to_field, FROM, from_field, LINK_TO, LINK_FROM>
 	//~ unload() -- превращает все указатели в ID
-	//~ delete() -- обнуляет все ID/указатели или удаляет их в случае BaseLinkSet
-	//~ delete(указатель или ID) -- исключает из себя этот элемент (для BaseLinkSet)
+	//~ erase() -- обнуляет все ID/указатели или удаляет их в случае BaseLinkSet
+	//~ erase(указатель или ID) -- исключает из себя этот элемент (для BaseLinkSet)
 	//~ set(указатель или ID) -- налаживает связь с этим элементом
-		//~ если LINK_TO=BaseLink, то сначала вызывает у Reference этого элемента delete (если был установлен)
+		//~ если LINK_TO=BaseLink, то сначала вызывает у Reference этого элемента erase (если был установлен)
 	//~ load() -- загружает объект(ы), на которые ссылается, устанавливает указатели
 	//~ load(ID) -- (для BaseLinkSet) загружает объект с таким ID
 
@@ -46,25 +46,27 @@ public:
 	typedef Reference<FROM, from_field, TO, to_field, BaseLink, LINK_TO> my_type;
 	typedef Reference<TO, to_field, FROM, from_field, LINK_TO, BaseLink> neighbour_type;
 	
-	neighbour_type* const neighbour() {
+	neighbour_type* neighbour() {
 		// FIXME!!! load neighbour if needed
-		return (neighbour_type*)(get());
+		return (neighbour_type*)get();
 	}
 	
 	void unload() { 
-		unload_simple(this, neighbour()->host()->id());
 		neighbour()->unload_simple(this, this->host()->id());
+		unload_simple(this, neighbour()->host()->id());
 	}
 	
 	void set(void* ptr) {
 		if (is_set()) {
-			neighbour()->delete_simple(this);
+			neighbour()->erase_simple(this);
 		}
 		set_simple(ptr);
 	}
 	void set(int ID) { set(id_pack(ID)); }
 	void set(neighbour_type* neighbour) { set((void*)neighbour); }
 	void set(TO* to) { set(neighbour_type::from_host(to)); }
+	
+	void erase() { set((void*)0); }
 	
 private:
 };

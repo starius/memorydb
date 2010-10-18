@@ -25,7 +25,7 @@ public:
 	void unload_simple(void* ptr, int ID);
 	void load_simple(void* ptr, int ID);
 	
-	void delete_simple(iterator elm) {
+	void erase_simple(iterator elm) {
 		if (ordered) { 
 			refs_.erase(elm); 
 		} 
@@ -34,8 +34,8 @@ public:
 			refs_.pop_back();
 		}
 	}
-	void delete_simple(void* ptr);
-	void delete_simple(int ID) { delete_simple(id_pack(ID)); }
+	void erase_simple(void* ptr);
+	void erase_simple(int ID) { erase_simple(id_pack(ID)); }
 	
 	void set_simple(void* ptr) { 
 		if (multi || find(ptr) == end()) {
@@ -70,12 +70,12 @@ void BaseLinkSet<>::load_simple(void* ptr, int ID)
 }
 
 template<>
-void BaseLinkSet<>::delete_simple(void* ptr)
+void BaseLinkSet<>::erase_simple(void* ptr)
 {
 	iterator elm = find(ptr);
 	if (elm != end())
 	{
-		delete_simple(elm);
+		erase_simple(elm);
 	}
 }
 
