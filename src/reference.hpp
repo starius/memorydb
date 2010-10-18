@@ -42,7 +42,7 @@ template<typename FROM, int from_field,
 	typename TO, int to_field, 
 	typename LINK_TO>
 class Reference<FROM, from_field, TO, to_field, BaseLink, LINK_TO>
- : BaseLink
+ : public BaseLink
 {
 public:
 	typedef Reference<FROM, from_field, TO, to_field, BaseLink, LINK_TO> my_type;
@@ -86,7 +86,7 @@ template<typename FROM, int from_field,
 	typename LINK_TO, 
 	bool ordered, bool multi, template<typename, typename> class Container>
 class Reference<FROM, from_field, TO, to_field, BaseLinkSet<ordered, multi, Container>, LINK_TO>
- : BaseLinkSet<ordered, multi, Container>
+ : public BaseLinkSet<ordered, multi, Container>
 {
 public:
 	typedef BaseLinkSet<ordered, multi, Container> BLS;

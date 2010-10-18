@@ -2,6 +2,8 @@
 #include "base_link_set.hpp"
 #include "reference.hpp"
 
+#include <iostream>
+
 using namespace memorydb;
 
 
@@ -18,5 +20,8 @@ int main()
 {
 	BaseLink base_link;
 	BaseLinkSet<> base_link_set;
+	A a1;
+	A a2;
 	
+	std::cout << a1.ref.size() << std::endl;
 }
