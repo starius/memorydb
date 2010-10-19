@@ -10,12 +10,18 @@ class BaseModel
 {
 public:
 	typedef ModelTracker<T> tracker;
+	static get(int ID) { return tracker::get(ID); }
 	
 	int id() const { return id_; } // FIXME!!! save if needed
-	bool is_saved() const { return id_ == 0; }
+	bool is_saved() const { return id() == 0; }
+	
+	bool is_used() const { return used_; }
+	void use() { used_ = true; }
+	void used_reset() { used_ = false; }
 private:
 	InnerLinkSet<T> inner_link_set_;
 	int id_;
+	bool used_;
 };
 
 }
