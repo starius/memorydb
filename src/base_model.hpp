@@ -2,6 +2,7 @@
 #define MEMORYDB_BASE_MODEL_H_
 
 #include "inner_link_set.hpp"
+#include "id.hpp"
 
 namespace memorydb {
 
@@ -10,18 +11,17 @@ class BaseModel
 {
 public:
 	typedef ModelTracker<T> tracker;
-	static get(int ID) { return tracker::get(ID); }
+	static get(id_t ID) { return tracker::get(ID); }
 	
-	int id() const { return id_; } // FIXME!!! save if needed
+	id_t id() const { return used_id_ >> 1; } // FIXME!!! save if needed
 	bool is_saved() const { return id() == 0; }
 	
-	bool is_used() const { return used_; }
-	void use() { used_ = true; }
-	void used_reset() { used_ = false; }
+	bool is_used() const { return used_id_ & 1; }
+	void use() { used_id_ |= 1; }
+	void used_reset() { used_id_ &= (~1); }
 private:
 	InnerLinkSet<T> inner_link_set_;
-	int id_;
-	bool used_;
+	id_t used_id_;
 };
 
 }

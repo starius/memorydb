@@ -43,7 +43,7 @@ public:
 		this->set_simple(ptr);
 		neighbour()->set_simple(this);
 	}
-	void set(int ID) { set(BaseLink(ID)); }
+	void set(id_t ID) { set(BaseLink(ID)); }
 	void set(neighbour_type* neighbour) { set(BaseLink(neighbour)); }
 	void set(TO* to) { set(neighbour_type::from_host(to)); }
 	

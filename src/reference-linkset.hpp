@@ -69,7 +69,7 @@ public:
 		}
 	}
 	
-	iterator find(int ID) { return find(BaseLink(ID)); }
+	iterator find(id_t ID) { return find(BaseLink(ID)); }
 	iterator find(neighbour_type* neighbour) { return find(BaseLink(neighbour)); }
 	iterator find(TO* to) { return find(neighbour_type::from_host(to)); }
 	
@@ -110,7 +110,7 @@ public:
 		}
 	}
 	
-	void erase(int ID) { erase(BaseLink(ID)); }
+	void erase(id_t ID) { erase(BaseLink(ID)); }
 	void erase(neighbour_type* neighbour) { erase(BaseLink(neighbour)); }
 	void erase(TO* to) { erase(neighbour_type::from_host(to)); }
 	
@@ -124,7 +124,7 @@ public:
 		}
 	}	
 	
-	void set(int ID) { set(BaseLink(ID)); }
+	void set(id_t ID) { set(BaseLink(ID)); }
 	void set(neighbour_type* neighbour) { set(BaseLink(neighbour)); }
 	void set(TO* to) { set(neighbour_type::from_host(to)); }
 	

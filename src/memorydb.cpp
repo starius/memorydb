@@ -11,22 +11,22 @@ using namespace memorydb;
 class A
 {
 public:
-	int id() { return id_; }
+	id_t id() { return id_; }
 	A(): a(0) {}
-	A(int id): id_(id) {}
+	A(id_t id): id_(id) {}
 	
 	Reference<A, 1, A, 1, BaseLinkSet<>, BaseLinkSet<> > m2m;
 	Reference<A, 2, A, 2, BaseLink, BaseLink> o2o;
 	
 	int a;
 	
-	static A* get(int ID)
+	static A* get(id_t ID)
 	{
 		// костыль
 		return new A(ID);
 	}
 private:
-	int id_;
+	id_t id_;
 };
 
 memorydb_init(A, 1, m2m);

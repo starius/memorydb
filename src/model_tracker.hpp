@@ -1,27 +1,27 @@
-#ifndef MEMORYDB_TRACKER_H_
-#define MEMORYDB_TRACKER_H_
+#ifndef MEMORYDB_MODEL_TRACKER_H_
+#define MEMORYDB_MODEL_TRACKER_H_
 
 #include "reference.hpp"
-#include "item.hpp"
 #include <map>
 
 namespace memorydb {
 
-class Tracker
+template<typename T>
+class ModelTracker
 {
 public:
 	Tracker(char* db_name);
-	Item* get(int id);
+	Item* get(id_t id);
 	
 private:
 	std::map<id, Item*> loaded_;
 	int occupied_; // total space in bytes
 	std::slist<Item*> changed_;
 	
-	Item* load(int id);
-	void unload(int id);
+	Item* load(id_t id);
+	void unload(id_t id);
 	void unload(Item* item);
-	void save(int id);
+	void save(id_t id);
 	void save(Item* item);
 };
 
@@ -29,4 +29,4 @@ private:
 }
 
 
-#endif // MEMORYDB_TRACKER_H_
+#endif // MEMORYDB_MODEL_TRACKER_H_

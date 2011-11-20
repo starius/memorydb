@@ -5,6 +5,7 @@
 #include <algorithm>
 
 #include "base_link.hpp"
+#include "id.hpp"
 
 namespace memorydb {
 
@@ -17,13 +18,13 @@ public:
 	
 	iterator begin() { return refs_.begin(); }
 	iterator end() { return refs_.end(); }
-	int size() const { return refs_.size(); }
+	id_t size() const { return refs_.size(); }
 	bool empty() const { return refs_.empty(); }
 	iterator find(BaseLink ptr) { return std::find(begin(), end(), ptr); }
-	iterator find(int ID) { return find(BaseLink(ID)); }
+	iterator find(id_t ID) { return find(BaseLink(ID)); }
 	
-	void unload_simple(BaseLink ptr, int ID);
-	void load_simple(BaseLink ptr, int ID);
+	void unload_simple(BaseLink ptr, id_t ID);
+	void load_simple(BaseLink ptr, id_t ID);
 	
 	void erase_simple(iterator elm) 
 	{
@@ -38,7 +39,7 @@ public:
 		}
 	}
 	void erase_simple(BaseLink ptr);
-	void erase_simple(int ID) { erase_simple(BaseLink(ID)); }
+	void erase_simple(id_t ID) { erase_simple(BaseLink(ID)); }
 	
 	void set_simple(BaseLink ptr) 
 	{ 
@@ -47,7 +48,7 @@ public:
 			refs_.push_back(BaseLink(ptr));
 		}
 	}
-	void set_simple(int ID) { set_simple(BaseLink(ID)); }
+	void set_simple(id_t ID) { set_simple(BaseLink(ID)); }
 	
 protected:
 	LinksContainer refs_;
@@ -55,7 +56,7 @@ protected:
 
  
 template<>
-void BaseLinkSet<>::unload_simple(BaseLink ptr, int ID) 
+void BaseLinkSet<>::unload_simple(BaseLink ptr, id_t ID) 
 {
 	iterator elm = find(ptr);
 	if (elm != end())
@@ -65,7 +66,7 @@ void BaseLinkSet<>::unload_simple(BaseLink ptr, int ID)
 }
 
 template<>
-void BaseLinkSet<>::load_simple(BaseLink ptr, int ID) 
+void BaseLinkSet<>::load_simple(BaseLink ptr, id_t ID) 
 {
 	iterator elm = find(ID);
 	if (elm != end())
