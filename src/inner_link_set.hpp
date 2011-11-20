@@ -9,15 +9,12 @@
 namespace memorydb {
 
 template<typename FROM>
-class InnerLinkSet : Reference<FROM, -1, ExternalPointer, -1, BaseLinkSet, BaseLink>
-{
+class InnerLinkSet : Reference < FROM, -1, ExternalPointer, -1, BaseLinkSet, BaseLink > {
 public:
 private:
 };
 
 }
 
-
-
-
 #endif // MEMORYDB_INNER_LINK_SET_H_
+

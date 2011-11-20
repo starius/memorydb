@@ -7,65 +7,57 @@
 
 using namespace memorydb;
 
-
-class A
-{
+class A {
 public:
-	id_t id() { return id_; }
-	A(): a(0) {}
-	A(id_t id): id_(id) {}
-	
-	Reference<A, 1, A, 1, BaseLinkSet<>, BaseLinkSet<> > m2m;
-	Reference<A, 2, A, 2, BaseLink, BaseLink> o2o;
-	
-	int a;
-	
-	static A* get(id_t ID)
-	{
-		// костыль
-		return new A(ID);
-	}
+    id_t id() {
+        return id_;
+    }
+    A(): a(0) {}
+    A(id_t id): id_(id) {}
+
+    Reference<A, 1, A, 1, BaseLinkSet<>, BaseLinkSet<> > m2m;
+    Reference<A, 2, A, 2, BaseLink, BaseLink> o2o;
+
+    int a;
+
+    static A* get(id_t ID) {
+        // костыль
+        return new A(ID);
+    }
 private:
-	id_t id_;
+    id_t id_;
 };
 
 memorydb_init(A, 1, m2m);
 memorydb_init(A, 2, o2o);
 
-
-int main()
-{
-	BaseLink base_link;
-	BaseLinkSet<> base_link_set;
-	A a1;
-	A a2;
-	
-	a1.o2o.set(&a2);
-	a2.o2o.set(&a2);
-	a2.o2o.erase();
-	a1.o2o.set(&a2);
-	a1.o2o.set(&a2);
-	
-	assert(a1.o2o.is_set() == true);
-	assert(a2.o2o.is_set() == true);
-	
-	a1.a = 1;
-	a2.a = 2;
-	
-	assert(a1.o2o.neighbour()->host()->a == 2);
-	assert(a2.o2o.neighbour()->host()->a == 1);
-	
-	assert(a1.o2o.is_loaded() == true);
-	a1.o2o.unload();
-	assert(a1.o2o.is_loaded() == false);
-	a1.o2o.unload();
-	a2.o2o.unload();
-	a1.o2o.unload();
-	a2.o2o.unload();
-	
-	a1.o2o.set(&a2);
-	a1.o2o.set(&a2);
-	a1.o2o.set(&a2);
-	assert(a1.o2o.is_loaded() == true);
-	assert(a2.o2o.is_set() == true);
+int main() {
+    BaseLink base_link;
+    BaseLinkSet<> base_link_set;
+    A a1;
+    A a2;
+    a1.o2o.set(&a2);
+    a2.o2o.set(&a2);
+    a2.o2o.erase();
+    a1.o2o.set(&a2);
+    a1.o2o.set(&a2);
+    assert(a1.o2o.is_set() == true);
+    assert(a2.o2o.is_set() == true);
+    a1.a = 1;
+    a2.a = 2;
+    assert(a1.o2o.neighbour()->host()->a == 2);
+    assert(a2.o2o.neighbour()->host()->a == 1);
+    assert(a1.o2o.is_loaded() == true);
+    a1.o2o.unload();
+    assert(a1.o2o.is_loaded() == false);
+    a1.o2o.unload();
+    a2.o2o.unload();
+    a1.o2o.unload();
+    a2.o2o.unload();
+    a1.o2o.set(&a2);
+    a1.o2o.set(&a2);
+    a1.o2o.set(&a2);
+    assert(a1.o2o.is_loaded() == true);
+    assert(a2.o2o.is_set() == true);
 }
+

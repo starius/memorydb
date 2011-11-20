@@ -6,14 +6,13 @@
 namespace memorydb {
 
 template<typename TO>
-class ExternalPointer
-{
+class ExternalPointer {
 public:
 private:
-	ExternalPointerMember<TO> external_pointer_member_;
+    ExternalPointerMember<TO> external_pointer_member_;
 };
 
 }
 
-
 #endif // MEMORYDB_EXTERNAL_POINTER_MEMBER_H_
+
